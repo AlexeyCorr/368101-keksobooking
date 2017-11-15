@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Алексей Корякин](https://up.htmlacademy.ru/javascript/11/user/368101).
-* Наставник: `Неизвестно`.
+* Наставник: `Егор Огарков`.
 
 ---
 
