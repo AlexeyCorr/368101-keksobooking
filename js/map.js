@@ -62,9 +62,10 @@ var getAddressX = function () {
 
 // Получение координаты по оси У
 var getAddressY = function () {
+  var pinHeight = 43;
   var yMin = ADVERT_OPTIONS.location.y.min;
   var yMax = ADVERT_OPTIONS.location.y.max;
-  var addressY = getRandomValue(yMin, yMax);
+  var addressY = getRandomValue(yMin, yMax) + pinHeight;
   return addressY;
 };
 
@@ -141,6 +142,32 @@ var getAvatarLink = function (array) {
   return 'img/avatars/user' + gatArrayItem(array) + '.png';
 };
 
+// Получение предложения с количеством комнат и гостей
+var getRoomsAndGuests = function () {
+  var amountRooms = getAmountRooms(ADVERT_OPTIONS.rooms.min, ADVERT_OPTIONS.rooms.max);
+  var amountGuests = getAmountGuests(ADVERT_OPTIONS.guests.min, ADVERT_OPTIONS.guests.max);
+  var amountRoomsAndGuests = '';
+  switch (amountRooms) {
+    case (2, 3, 4):
+      amountRooms = amountRooms + ' комнаты';
+      break;
+    case 5:
+      amountRooms = 5 + ' комнат';
+      break;
+    default:
+      amountRooms = 1 + ' комната';
+      break;
+  }
+  if (amountGuests !== 1) {
+    amountGuests = amountGuests + ' гостей';
+  } else {
+    amountGuests = 1 + ' гостей';
+  }
+  amountRoomsAndGuests = amountRooms + ' для ' + amountGuests;
+
+  return amountRoomsAndGuests;
+};
+
 // Получение Одного объявления
 var createAdvert = function () {
   var advert = {
@@ -154,6 +181,7 @@ var createAdvert = function () {
       type: getTypeHouse(),
       rooms: getAmountRooms(ADVERT_OPTIONS.rooms.min, ADVERT_OPTIONS.rooms.max),
       guests: getAmountGuests(ADVERT_OPTIONS.guests.min, ADVERT_OPTIONS.guests.max),
+      roomsAndGuests: getRoomsAndGuests(),
       checkin: getTimeCheckIn(ADVERT_OPTIONS.checkin),
       checkout: getTimeCheckOut(ADVERT_OPTIONS.checkout),
       features: getListFeatures(),
@@ -175,32 +203,6 @@ var getAdvertArray = function () {
     advertArray[i] = createAdvert();
   }
   return advertArray;
-};
-
-// Получение предложения с количеством комнат и гостей
-var getRoomsAndGuests = function (array) {
-  var amountRooms = array.offer.rooms;
-  var amountGuests = array.offer.guests;
-  var amountRoomsAndGuests = '';
-  switch (amountRooms) {
-    case (2, 3, 4):
-      amountRooms = amountRooms + ' комнаты';
-      break;
-    case 5:
-      amountRooms = 5 + ' комнат';
-      break;
-    default:
-      amountRooms = 1 + ' комната';
-      break;
-  }
-  if (amountGuests !== 1) {
-    amountGuests = amountGuests + ' гостей';
-  } else {
-    amountGuests = 1 + ' гостей';
-  }
-  amountRoomsAndGuests = amountRooms + ' для ' + amountGuests;
-
-  return amountRoomsAndGuests;
 };
 
 // Создание маркеров объявлений
@@ -236,13 +238,11 @@ var createAdvertBoard = function (array) {
 
   similarAdvert.querySelector('h3').textContent = array.offer.title;
   similarAdvert.querySelector('p small').textContent = array.offer.address;
-  similarAdvert.querySelector('.popup__price').textContent = array.offer.price + '&#x20bd;/ночь';
+  similarAdvert.querySelector('.popup__price').textContent = array.offer.price + ' \u20BD' + '/ночь';
   similarAdvert.querySelector('h4').textContent = array.offer.type;
-  // similarAdvert.querySelector('p:nth-child(3)').textContent = getRoomsAndGuests(array);
+  similarAdvert.querySelector('p:nth-of-type(3)').textContent = array.offer.roomsAndGuests;
   similarAdvert.querySelector('p:nth-of-type(4)').textContent = 'Заезд после ' + array.offer.checkin + ', выезд до ' + array.offer.checkout;
-  // for (var i = 0; i < array.offer.features.length; i++) {
-  //   similarAdvert.querySelectorAll('features').textContent = array.offer.features;
-  // }
+  // features
   similarAdvert.querySelector('p:nth-of-type(5)').textContent = array.offer.description;
 
   return similarAdvert;
@@ -266,7 +266,5 @@ removeClass('map--faded');
 getAdvertArray();
 
 drawMapPin();
-
- //  console.log(createAdvertBoard(advertArray[5]));
 
 drawAdvert();
