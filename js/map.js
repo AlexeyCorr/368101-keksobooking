@@ -33,11 +33,10 @@ var ADVERT_OPTIONS = {
 };
 
 // Показывает поле карты
-var removeClass = function (className) {
-  var map = document.querySelector('.map');
-  map.classList.remove(className);
+var removeClass = function (element, className) {
+  element.classList.remove(className);
 
-  return map;
+  return element;
 };
 
 // Получение случайного значения
@@ -196,13 +195,22 @@ var createAdvert = function () {
   return advert;
 };
 
+// Создание нового списка особенностей
+var createNewListFeatures = function (features, list) {
+  list.innerHTML = '';
+  for (var i = 0; i < features.length; i++) {
+    var currentFeature = document.createElement('li');
+    currentFeature.classList.add('feature', 'feature--' + features[i]);
+    list.appendChild(currentFeature);
+  }
+};
+
 // Получение массива с объявлениями
 var advertArray = [];
 var getAdvertArray = function () {
   for (var i = 0; i < ADVERT_OPTIONS.amount; i++) {
     advertArray[i] = createAdvert();
   }
-  return advertArray;
 };
 
 // Создание маркеров объявлений
@@ -211,12 +219,11 @@ var createMapPin = function (advert) {
   var mapPinElement = mapPinTemplate.cloneNode(true);
 
   for (var i = 0; i < advertArray.length; i++) {
-    // mapPinElement.style.left = advert.location.x + 'px;';
-    // mapPinElement.style.top = advert.location.y + 'px;';
-    mapPinElement.setAttribute('style', 'left: ' + advert.location.x + 'px; top: ' + advert.location.y + 'px;');
+    mapPinElement.style.left = advert.location.x + 'px';
+    mapPinElement.style.top = advert.location.y + 'px';
     mapPinElement.querySelector('img').src = advert.author.avatar;
   }
-  // console.log(mapPinElement);
+
   return mapPinElement;
 };
 
@@ -228,7 +235,7 @@ var drawMapPin = function () {
   for (var i = 0; i < advertArray.length; i++) {
     fragment.appendChild(createMapPin(advertArray[i]));
   }
-  return mapPin.appendChild(fragment);
+  mapPin.appendChild(fragment);
 };
 
 // Создание доски с объявлением
@@ -242,7 +249,11 @@ var createAdvertBoard = function (array) {
   similarAdvert.querySelector('h4').textContent = array.offer.type;
   similarAdvert.querySelector('p:nth-of-type(3)').textContent = array.offer.roomsAndGuests;
   similarAdvert.querySelector('p:nth-of-type(4)').textContent = 'Заезд после ' + array.offer.checkin + ', выезд до ' + array.offer.checkout;
-  // features
+  createNewListFeatures(array.offer.features, similarAdvert.querySelector('.popup__features'));
+  // similarAdvert.querySelector('.popup__features').innerHTML = '';
+  // for (var i = 0; i < 8; i++) {
+  //   similarAdvert.querySelector('.popup__features').innerHTML = '<li class="feature feature--' + array.offer.features[i] + '"></li>';
+  // }
   similarAdvert.querySelector('p:nth-of-type(5)').textContent = array.offer.description;
 
   return similarAdvert;
@@ -252,19 +263,17 @@ var createAdvertBoard = function (array) {
 var drawAdvert = function () {
   var fragment = document.createDocumentFragment();
   var map = document.querySelector('.map');
-  // var mapContainer = document.querySelector('.map__filters-container');
 
   for (var i = 0; i < advertArray.length; i++) {
     fragment.appendChild(createAdvertBoard(advertArray[i]));
   }
+  removeClass(map, 'map--faded');
 
-  return map.appendChild(fragment);
+  map.appendChild(fragment);
+
+  drawMapPin();
 };
 
-removeClass('map--faded');
-
 getAdvertArray();
-
-drawMapPin();
 
 drawAdvert();
