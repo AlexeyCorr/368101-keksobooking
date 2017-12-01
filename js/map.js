@@ -198,11 +198,12 @@ var createAdvert = function () {
 // Создание нового списка особенностей
 var createNewListFeatures = function (features, list) {
   list.innerHTML = '';
-  for (var i = 0; i < features.length; i++) {
+  features.forEach(function (feature) {
     var currentFeature = document.createElement('li');
-    currentFeature.classList.add('feature', 'feature--' + features[i]);
+    currentFeature.className = 'feature feature--' + feature;
     list.appendChild(currentFeature);
-  }
+  });
+  return list;
 };
 
 // Получение массива с объявлениями
