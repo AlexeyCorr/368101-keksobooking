@@ -112,8 +112,12 @@ var getTimeCheckOut = function (times) {
 
 // Получение массива особенностей случайной длины
 var getListFeatures = function () {
-  var featuresList = ADVERT_OPTIONS.features;
-  featuresList.length = getRandomValue(1, featuresList.length);
+  var featuresList = [];
+  var randomLength = getRandomValue(1, ADVERT_OPTIONS.features.length);
+
+  for (var i = 0; i < randomLength; i++) {
+    featuresList.push(ADVERT_OPTIONS.features[i]);
+  }
 
   return featuresList;
 };
@@ -124,7 +128,6 @@ var getAvatarIndex = function (length) {
   for (var i = 0; i < length; i++) {
     avatarIndex[i] = '0' + (i + 1);
   }
-  return avatarIndex;
 };
 
 // Получение случайного НЕ повторяющегося индекса аватара
@@ -132,6 +135,7 @@ var gatArrayItem = function (array) {
   var currentIndex = getRandomValue(0, array.length - 1);
   var arrayItem = array[currentIndex];
   array.splice(currentIndex, 1);
+
   return arrayItem;
 };
 
@@ -203,7 +207,6 @@ var createNewListFeatures = function (features, list) {
     currentFeature.className = 'feature feature--' + feature;
     list.appendChild(currentFeature);
   });
-  return list;
 };
 
 // Получение массива с объявлениями
@@ -240,22 +243,18 @@ var drawMapPin = function () {
 };
 
 // Создание доски с объявлением
-var createAdvertBoard = function (array) {
+var createAdvertBoard = function (advert) {
   var similarAdvertTemplate = document.querySelector('template').content.querySelector('.map__card');
   var similarAdvert = similarAdvertTemplate.cloneNode(true);
 
-  similarAdvert.querySelector('h3').textContent = array.offer.title;
-  similarAdvert.querySelector('p small').textContent = array.offer.address;
-  similarAdvert.querySelector('.popup__price').textContent = array.offer.price + ' \u20BD' + '/ночь';
-  similarAdvert.querySelector('h4').textContent = array.offer.type;
-  similarAdvert.querySelector('p:nth-of-type(3)').textContent = array.offer.roomsAndGuests;
-  similarAdvert.querySelector('p:nth-of-type(4)').textContent = 'Заезд после ' + array.offer.checkin + ', выезд до ' + array.offer.checkout;
-  createNewListFeatures(array.offer.features, similarAdvert.querySelector('.popup__features'));
-  // similarAdvert.querySelector('.popup__features').innerHTML = '';
-  // for (var i = 0; i < 8; i++) {
-  //   similarAdvert.querySelector('.popup__features').innerHTML = '<li class="feature feature--' + array.offer.features[i] + '"></li>';
-  // }
-  similarAdvert.querySelector('p:nth-of-type(5)').textContent = array.offer.description;
+  similarAdvert.querySelector('h3').textContent = advert.offer.title;
+  similarAdvert.querySelector('p small').textContent = advert.offer.address;
+  similarAdvert.querySelector('.popup__price').textContent = advert.offer.price + ' \u20BD' + '/ночь';
+  similarAdvert.querySelector('h4').textContent = advert.offer.type;
+  similarAdvert.querySelector('p:nth-of-type(3)').textContent = advert.offer.roomsAndGuests;
+  similarAdvert.querySelector('p:nth-of-type(4)').textContent = 'Заезд после ' + advert.offer.checkin + ', выезд до ' + advert.offer.checkout;
+  createNewListFeatures(advert.offer.features, similarAdvert.querySelector('.popup__features'));
+  similarAdvert.querySelector('p:nth-of-type(5)').textContent = advert.offer.description;
 
   return similarAdvert;
 };
@@ -265,12 +264,10 @@ var drawAdvert = function () {
   var fragment = document.createDocumentFragment();
   var map = document.querySelector('.map');
 
-  for (var i = 0; i < advertArray.length; i++) {
-    fragment.appendChild(createAdvertBoard(advertArray[i]));
-  }
-  removeClass(map, 'map--faded');
-
+  fragment.appendChild(createAdvertBoard(advertArray[0]));
   map.appendChild(fragment);
+
+  removeClass(map, 'map--faded');
 
   drawMapPin();
 };
