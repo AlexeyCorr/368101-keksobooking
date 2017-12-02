@@ -77,14 +77,7 @@ var getRandomPrice = function (priceMin, priceMax) {
 var getTypeHouse = function () {
   var type = ADVERT_OPTIONS.type;
   var typeHouse = type[getRandomValue(0, type.length - 1)];
-  switch (typeHouse) {
-    case 'flat':
-      return 'Квартира';
-    case 'house':
-      return 'Дом';
-    case 'bungalo':
-      return 'Бунгало';
-  }
+
   return typeHouse;
 };
 
@@ -171,6 +164,20 @@ var getRoomsAndGuests = function () {
   return amountRoomsAndGuests;
 };
 
+// Получение типа помещения
+var drawTypeHouse = function (advert) {
+  var typeHouse = advert.offer.type;
+  switch (typeHouse) {
+    case 'flat':
+      return 'Квартира';
+    case 'house':
+      return 'Дом';
+    case 'bungalo':
+      return 'Бунгало';
+  }
+  return typeHouse;
+};
+
 // Получение Одного объявления
 var createAdvert = function () {
   var advert = {
@@ -250,7 +257,7 @@ var createAdvertBoard = function (advert) {
   similarAdvert.querySelector('h3').textContent = advert.offer.title;
   similarAdvert.querySelector('p small').textContent = advert.offer.address;
   similarAdvert.querySelector('.popup__price').textContent = advert.offer.price + ' \u20BD' + '/ночь';
-  similarAdvert.querySelector('h4').textContent = advert.offer.type;
+  similarAdvert.querySelector('h4').textContent = drawTypeHouse(advert);
   similarAdvert.querySelector('p:nth-of-type(3)').textContent = advert.offer.roomsAndGuests;
   similarAdvert.querySelector('p:nth-of-type(4)').textContent = 'Заезд после ' + advert.offer.checkin + ', выезд до ' + advert.offer.checkout;
   createNewListFeatures(advert.offer.features, similarAdvert.querySelector('.popup__features'));
