@@ -32,6 +32,18 @@ var ADVERT_OPTIONS = {
   }
 };
 
+var KEY_CODES = {
+  enter: 13,
+  escape: 27
+};
+
+var advertCard = null;
+var map = document.querySelector('.map');
+var mapPinMain = document.querySelector('.map__pin--main');
+var similarAdvertTemplate = document.querySelector('template').content.querySelector('.map__card');
+var similarAdvert = similarAdvertTemplate.cloneNode(true);
+var buttonClose = similarAdvert.querySelector('.popup__close');
+
 // Показывает поле карты
 var removeClass = function (element, className) {
   element.classList.remove(className);
@@ -249,9 +261,7 @@ var drawMapPin = function () {
 
 // Создание доски с объявлением
 var createAdvertBoard = function (advert) {
-  var similarAdvertTemplate = document.querySelector('template').content.querySelector('.map__card');
-  var similarAdvert = similarAdvertTemplate.cloneNode(true);
-
+  similarAdvert.querySelector('img').src = advert.author.avatar;
   similarAdvert.querySelector('h3').textContent = advert.offer.title;
   similarAdvert.querySelector('p small').textContent = advert.offer.address;
   similarAdvert.querySelector('.popup__price').textContent = advert.offer.price + ' \u20BD' + '/ночь';
@@ -265,18 +275,78 @@ var createAdvertBoard = function (advert) {
 };
 
 // Отрисовка объявлений
-var drawAdvert = function () {
-  var fragment = document.createDocumentFragment();
-  var map = document.querySelector('.map');
+// var drawAdvert = function () {
+//   var fragment = document.createDocumentFragment();
+//   var mapFilters = map.querySelector('.map__filters-container');
+//
+//   fragment.appendChild(createAdvertBoard(advertArray[0]));
+//   map.insertBefore(fragment, mapFilters);
+// };
 
-  fragment.appendChild(createAdvertBoard(advertArray[0]));
-  map.appendChild(fragment);
+// ------------ ОБРАБОТКА СОБЫТИЙ ----------------
 
+// Активация карты и формы
+var onButtonMouseUp = function () {
+  var form = document.querySelector('.notice__form');
+  var formFields = document.querySelectorAll('fieldset');
+
+  removeClass(form, 'notice__form--disabled');
+  for (var i = 0; i < formFields.length; i++) {
+    formFields[i].disabled = false;
+  }
   removeClass(map, 'map--faded');
-
+  getAdvertArray();
   drawMapPin();
+
+  mapPinMain.removeEventListener('mouseup', onButtonMouseUp);
 };
 
-getAdvertArray();
+mapPinMain.addEventListener('mouseup', onButtonMouseUp);
 
-drawAdvert();
+var hideAdvert = function () {
+  if (advertCard) {
+    map.removeChild(advertCard);
+    advertCard = null;
+  }
+};
+
+// Переключение пинов
+var selectedPin;
+var changeTargetPin = function (target) {
+
+  if (selectedPin) {
+    selectedPin.classList.remove('map__pin--active');
+    hideAdvert();
+  }
+  selectedPin = target;
+  advertCard = createAdvertBoard(advertArray[0]);
+  map.insertBefore(advertCard, map.querySelector('.map__filters-container'));
+  selectedPin.classList.add('map__pin--active');
+  buttonClose.addEventListener('click', function () {
+    popupClose();
+  });
+  document.addEventListener('keydown', onButtonClosePress);
+};
+
+map.addEventListener('click', function (evt) {
+  var target = evt.target;
+
+  while (target !== map) {
+    if (target.classList.contains('map__pin') && !target.classList.contains('map__pin--main')) {
+      changeTargetPin(target);
+    }
+    target = target.parentNode;
+  }
+});
+
+var popupClose = function () {
+  hideAdvert();
+  selectedPin.classList.remove('map__pin--active');
+  document.removeEventListener('keydown', onButtonClosePress);
+};
+
+var onButtonClosePress = function (evt) {
+  if (evt.keyCode === KEY_CODES.escape) {
+    popupClose();
+  }
+};
