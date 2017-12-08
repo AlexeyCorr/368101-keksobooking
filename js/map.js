@@ -130,12 +130,12 @@ var getListFeatures = function () {
 var avatarIndex = [];
 var getAvatarIndex = function (length) {
   for (var i = 0; i < length; i++) {
-    avatarIndex[i] = '0' + (i + 1);
+    avatarIndex[i] = i + 1;
   }
 };
 
 // Получение случайного НЕ повторяющегося индекса аватара
-var gatArrayItem = function (array) {
+var getArrayItem = function (array) {
   var currentIndex = getRandomValue(0, array.length - 1);
   var arrayItem = array[currentIndex];
   array.splice(currentIndex, 1);
@@ -146,7 +146,7 @@ var gatArrayItem = function (array) {
 // Получение адреса изображения
 getAvatarIndex(ADVERT_OPTIONS.amount);
 var getAvatarLink = function (array) {
-  return 'img/avatars/user' + gatArrayItem(array) + '.png';
+  return 'img/avatars/user0' + getArrayItem(array) + '.png';
 };
 
 // Получение предложения с количеством комнат и гостей
@@ -239,11 +239,11 @@ var createMapPin = function (advert) {
   var mapPinTemplate = document.querySelector('template').content.querySelector('.map__pin');
   var mapPinElement = mapPinTemplate.cloneNode(true);
 
-  for (var i = 0; i < advertArray.length; i++) {
-    mapPinElement.style.left = advert.location.x + 'px';
-    mapPinElement.style.top = advert.location.y + 'px';
-    mapPinElement.querySelector('img').src = advert.author.avatar;
-  }
+  mapPinElement.style.left = advert.location.x + 'px';
+  mapPinElement.style.top = advert.location.y + 'px';
+  mapPinElement.querySelector('img').src = advert.author.avatar;
+  mapPinElement.dataset.index = advertArray.indexOf(advert);
+
 
   return mapPinElement;
 };
@@ -273,15 +273,6 @@ var createAdvertBoard = function (advert) {
 
   return similarAdvert;
 };
-
-// Отрисовка объявлений
-// var drawAdvert = function () {
-//   var fragment = document.createDocumentFragment();
-//   var mapFilters = map.querySelector('.map__filters-container');
-//
-//   fragment.appendChild(createAdvertBoard(advertArray[0]));
-//   map.insertBefore(fragment, mapFilters);
-// };
 
 // ------------ ОБРАБОТКА СОБЫТИЙ ----------------
 
@@ -313,13 +304,15 @@ var hideAdvert = function () {
 // Переключение пинов
 var selectedPin;
 var changeTargetPin = function (target) {
+  debugger;
+  var targetIndex = target.dataset.index;
 
   if (selectedPin) {
     selectedPin.classList.remove('map__pin--active');
     hideAdvert();
   }
   selectedPin = target;
-  advertCard = createAdvertBoard(advertArray[0]);
+  advertCard = createAdvertBoard(advertArray[targetIndex]);
   map.insertBefore(advertCard, map.querySelector('.map__filters-container'));
   selectedPin.classList.add('map__pin--active');
   buttonClose.addEventListener('click', function () {
@@ -334,6 +327,7 @@ map.addEventListener('click', function (evt) {
   while (target !== map) {
     if (target.classList.contains('map__pin') && !target.classList.contains('map__pin--main')) {
       changeTargetPin(target);
+      return;
     }
     target = target.parentNode;
   }
