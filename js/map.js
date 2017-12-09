@@ -304,7 +304,6 @@ var hideAdvert = function () {
 // Переключение пинов
 var selectedPin;
 var changeTargetPin = function (target) {
-  debugger;
   var targetIndex = target.dataset.index;
 
   if (selectedPin) {
@@ -344,3 +343,91 @@ var onButtonClosePress = function (evt) {
     popupClose();
   }
 };
+
+// -------ВАЛИДАЦИЯ
+
+var FLAT_PRICE = 1000;
+var BUNGALO_PRICE = 0;
+var HOUSE_PRICE = 10000;
+var PALACE_PRICE = 5000;
+var form = document.querySelector('.notice__form');
+var title = form.querySelector('#title');
+var timeIn = form.querySelector('#timein');
+var timeOut = form.querySelector('#timeout');
+var typeHouse = form.querySelector('#type');
+var price = form.querySelector('#price');
+var roomsNumber = form.querySelector('#room_number');
+var guestsNumber = form.querySelector('#capacity');
+var submit = form.querySelector('.form__submit');
+var invalidBorder = '2px solid red';
+var validBorder = '2px solid green';
+
+// Проверка валидности
+var checkValidity = function () {
+  if (title.validity.tooShort) {
+    title.setCustomValidity('Заголовок объявления должен быть не короче 30-ти символов');
+    title.style.border = invalidBorder;
+  } else if (title.validity.tooLong) {
+    title.setCustomValidity('Заголовок объявления не должен превышать 100 символов');
+    title.style.border = invalidBorder;
+  } else if (title.validity.valueMissing) {
+    title.setCustomValidity('Необходимо заполнить');
+    title.style.border = invalidBorder;
+  } else {
+    title.setCustomValidity('');
+    title.style.border = validBorder;
+  }
+};
+title.addEventListener('invalid', checkValidity);
+
+// Измерение времени заезда и выезда
+var onTimeInChange = function () {
+  timeOut.selectedIndex = timeIn.selectedIndex;
+};
+
+var onTimeOutChange = function () {
+  timeIn.selectedIndex = timeOut.selectedIndex;
+};
+timeIn.addEventListener('change', onTimeInChange);
+timeOut.addEventListener('change', onTimeOutChange);
+
+//  Изменение типа жилья в зависимости от цены
+var onTypeHouseChange = function () {
+  switch (typeHouse.selectedIndex) {
+    case 0:
+      price.min = FLAT_PRICE;
+      break;
+    case 1:
+      price.min = BUNGALO_PRICE;
+      break;
+    case 2:
+      price.min = HOUSE_PRICE;
+      break;
+    case 3:
+      price.min = PALACE_PRICE;
+      break;
+  }
+};
+typeHouse.addEventListener('change', onTypeHouseChange);
+
+//  Изменение количества гостей в зависимости от количества комнат
+var onNumRoomsChange = function () {
+  switch (roomsNumber.selectedIndex) {
+    case 0:
+      guestsNumber.selectedIndex = 2;
+      break;
+    case 1:
+      guestsNumber.selectedIndex = 1;
+      break;
+    case 2:
+      guestsNumber.selectedIndex = 0;
+      break;
+    case 3:
+      guestsNumber.selectedIndex = 3;
+  }
+};
+roomsNumber.addEventListener('change', onNumRoomsChange);
+
+submit.addEventListener('submit', function (evt) {
+  evt.preventDefault();
+});
