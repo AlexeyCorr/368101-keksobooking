@@ -32,6 +32,18 @@ var ADVERT_OPTIONS = {
   }
 };
 
+var KEY_CODES = {
+  enter: 13,
+  escape: 27
+};
+
+var advertCard = null;
+var map = document.querySelector('.map');
+var mapPinMain = document.querySelector('.map__pin--main');
+var similarAdvertTemplate = document.querySelector('template').content.querySelector('.map__card');
+var similarAdvert = similarAdvertTemplate.cloneNode(true);
+var buttonClose = similarAdvert.querySelector('.popup__close');
+
 // Показывает поле карты
 var removeClass = function (element, className) {
   element.classList.remove(className);
@@ -118,12 +130,12 @@ var getListFeatures = function () {
 var avatarIndex = [];
 var getAvatarIndex = function (length) {
   for (var i = 0; i < length; i++) {
-    avatarIndex[i] = '0' + (i + 1);
+    avatarIndex[i] = i + 1;
   }
 };
 
 // Получение случайного НЕ повторяющегося индекса аватара
-var gatArrayItem = function (array) {
+var getArrayItem = function (array) {
   var currentIndex = getRandomValue(0, array.length - 1);
   var arrayItem = array[currentIndex];
   array.splice(currentIndex, 1);
@@ -134,7 +146,7 @@ var gatArrayItem = function (array) {
 // Получение адреса изображения
 getAvatarIndex(ADVERT_OPTIONS.amount);
 var getAvatarLink = function (array) {
-  return 'img/avatars/user' + gatArrayItem(array) + '.png';
+  return 'img/avatars/user0' + getArrayItem(array) + '.png';
 };
 
 // Получение предложения с количеством комнат и гостей
@@ -227,11 +239,11 @@ var createMapPin = function (advert) {
   var mapPinTemplate = document.querySelector('template').content.querySelector('.map__pin');
   var mapPinElement = mapPinTemplate.cloneNode(true);
 
-  for (var i = 0; i < advertArray.length; i++) {
-    mapPinElement.style.left = advert.location.x + 'px';
-    mapPinElement.style.top = advert.location.y + 'px';
-    mapPinElement.querySelector('img').src = advert.author.avatar;
-  }
+  mapPinElement.style.left = advert.location.x + 'px';
+  mapPinElement.style.top = advert.location.y + 'px';
+  mapPinElement.querySelector('img').src = advert.author.avatar;
+  mapPinElement.dataset.index = advertArray.indexOf(advert);
+
 
   return mapPinElement;
 };
@@ -249,9 +261,7 @@ var drawMapPin = function () {
 
 // Создание доски с объявлением
 var createAdvertBoard = function (advert) {
-  var similarAdvertTemplate = document.querySelector('template').content.querySelector('.map__card');
-  var similarAdvert = similarAdvertTemplate.cloneNode(true);
-
+  similarAdvert.querySelector('img').src = advert.author.avatar;
   similarAdvert.querySelector('h3').textContent = advert.offer.title;
   similarAdvert.querySelector('p small').textContent = advert.offer.address;
   similarAdvert.querySelector('.popup__price').textContent = advert.offer.price + ' \u20BD' + '/ночь';
@@ -264,19 +274,73 @@ var createAdvertBoard = function (advert) {
   return similarAdvert;
 };
 
-// Отрисовка объявлений
-var drawAdvert = function () {
-  var fragment = document.createDocumentFragment();
-  var map = document.querySelector('.map');
+// ------------ ОБРАБОТКА СОБЫТИЙ ----------------
 
-  fragment.appendChild(createAdvertBoard(advertArray[0]));
-  map.appendChild(fragment);
+// Активация карты и формы
+var onButtonMouseUp = function () {
+  var form = document.querySelector('.notice__form');
+  var formFields = document.querySelectorAll('fieldset');
 
+  removeClass(form, 'notice__form--disabled');
+  for (var i = 0; i < formFields.length; i++) {
+    formFields[i].disabled = false;
+  }
   removeClass(map, 'map--faded');
-
+  getAdvertArray();
   drawMapPin();
+
+  mapPinMain.removeEventListener('mouseup', onButtonMouseUp);
 };
 
-getAdvertArray();
+mapPinMain.addEventListener('mouseup', onButtonMouseUp);
 
-drawAdvert();
+var hideAdvert = function () {
+  if (advertCard) {
+    map.removeChild(advertCard);
+    advertCard = null;
+  }
+};
+
+// Переключение пинов
+var selectedPin;
+var changeTargetPin = function (target) {
+  debugger;
+  var targetIndex = target.dataset.index;
+
+  if (selectedPin) {
+    selectedPin.classList.remove('map__pin--active');
+    hideAdvert();
+  }
+  selectedPin = target;
+  advertCard = createAdvertBoard(advertArray[targetIndex]);
+  map.insertBefore(advertCard, map.querySelector('.map__filters-container'));
+  selectedPin.classList.add('map__pin--active');
+  buttonClose.addEventListener('click', function () {
+    popupClose();
+  });
+  document.addEventListener('keydown', onButtonClosePress);
+};
+
+map.addEventListener('click', function (evt) {
+  var target = evt.target;
+
+  while (target !== map) {
+    if (target.classList.contains('map__pin') && !target.classList.contains('map__pin--main')) {
+      changeTargetPin(target);
+      return;
+    }
+    target = target.parentNode;
+  }
+});
+
+var popupClose = function () {
+  hideAdvert();
+  selectedPin.classList.remove('map__pin--active');
+  document.removeEventListener('keydown', onButtonClosePress);
+};
+
+var onButtonClosePress = function (evt) {
+  if (evt.keyCode === KEY_CODES.escape) {
+    popupClose();
+  }
+};
