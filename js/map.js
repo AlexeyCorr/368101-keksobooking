@@ -424,14 +424,14 @@ var changeEvents = function () {
   });
 };
 
-// Окрашивает бордер
-var checkValidityField = function (element) {
-  for (var i = 0; i < element.length; i++) {
-    if (!element[i].validity.valid) {
-      getCustomMessage(element[i]);
+// Проверка валидации
+var checkFieldValidity = function (fields) {
+  for (var i = 0; i < fields.length; i++) {
+    if (!fields[i].validity.valid) {
+      getCustomMessage(fields[i]);
     } else {
-      element[i].setCustomValidity('');
-      element[i].style.borderColor = '#d9d9d3';
+      fields[i].setCustomValidity('');
+      fields[i].style.borderColor = '#d9d9d3';
     }
   }
 };
@@ -440,5 +440,5 @@ changeEvents();
 
 // Отправка формы
 submit.addEventListener('click', function () {
-  checkValidityField(validFields);
+  checkFieldValidity(validFields);
 });
