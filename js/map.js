@@ -345,11 +345,18 @@ var onButtonClosePress = function (evt) {
 };
 
 // -------ВАЛИДАЦИЯ
-
-var FLAT_PRICE = 1000;
-var BUNGALO_PRICE = 0;
-var HOUSE_PRICE = 10000;
-var PALACE_PRICE = 5000;
+var houseMinPrice = {
+  bungalo: 0,
+  flat: 1000,
+  house: 5000,
+  palace: 10000
+};
+var numbersOfRoom = {
+  1: ['1'],
+  2: ['2', '1'],
+  3: ['3', '2', '1'],
+  100: ['0']
+};
 var form = document.querySelector('.notice__form');
 var title = form.querySelector('#title');
 var timeIn = form.querySelector('#timein');
@@ -358,77 +365,100 @@ var typeHouse = form.querySelector('#type');
 var price = form.querySelector('#price');
 var roomsNumber = form.querySelector('#room_number');
 var guestsNumber = form.querySelector('#capacity');
-var submit = form.querySelector('.form__submit');
-var invalidBorder = '2px solid red';
-var validBorder = '2px solid green';
+// var submit = form.querySelector('.form__submit');
 
-// Проверка валидности (мне кажется в этом мало смысла, так как браузер справляется лучше с этим из коробки)
-var checkValidity = function () {
+// Получить выбранный option1 в зависимости выбранного option2
+var getSelectedOption = function (select1, select2) {
+  select2.options[select1.selectedIndex].selected = 'selected';
+};
+
+// Создает кастомное сообщение об ошибки в цене
+var validityPriceValue = function () {
+  if (price.validity.rangeUnderflow) {
+    price.setCustomValidity('Минимально допустимая цена: ' + price.min + '.');
+  } else if (price.validity.rangeOverflow) {
+    price.setCustomValidity('Максимально допустимая цена: ' + price.max + '.');
+  } else if (price.validity.valueMissing) {
+    price.setCustomValidity('Необходимо ввести цену');
+  } else {
+    price.setCustomValidity('');
+  }
+};
+
+// Создает кастомное сообщение об ошибки в заголовке
+var validityTitleValue = function () {
   if (title.validity.tooShort) {
-    title.setCustomValidity('Заголовок объявления должен быть не короче 30-ти символов');
-    title.style.border = invalidBorder;
+    title.setCustomValidity('Минимально допустимое количество символов: ' + title.minLength + '.');
   } else if (title.validity.tooLong) {
-    title.setCustomValidity('Заголовок объявления не должен превышать 100 символов');
-    title.style.border = invalidBorder;
+    title.setCustomValidity('Мaксимально допустимое количество символов: ' + title.maxLength + '.');
   } else if (title.validity.valueMissing) {
-    title.setCustomValidity('Необходимо заполнить');
-    title.style.border = invalidBorder;
+    title.setCustomValidity('Заполните это поле');
   } else {
     title.setCustomValidity('');
-    title.style.border = validBorder;
   }
 };
-title.addEventListener('invalid', checkValidity);
 
-// Измерение времени заезда и выезда
-var onTimeInChange = function () {
-  timeOut.selectedIndex = timeIn.selectedIndex;
+//  Добавляет неактивные поля
+var disabledGuests = function () {
+  Array.prototype.forEach.call(guestsNumber.options, function (guest) {
+    if (numbersOfRoom[roomsNumber.value].indexOf(guest.value) >= 0) {
+      guest.disabled = false;
+    } else {
+      guest.disabled = true;
+    }
+  });
 };
 
-var onTimeOutChange = function () {
-  timeIn.selectedIndex = timeOut.selectedIndex;
-};
-timeIn.addEventListener('change', onTimeInChange);
-timeOut.addEventListener('change', onTimeOutChange);
+var changeEvents = function () {
+  //  Изменение типа жилья в зависимости от цены
+  typeHouse.addEventListener('change', function () {
+    price.min = houseMinPrice[typeHouse.value];
+    price.placeholder = price.min;
+  });
 
-//  Изменение типа жилья в зависимости от цены
-var onTypeHouseChange = function () {
-  switch (typeHouse.selectedIndex) {
-    case 0:
-      price.min = FLAT_PRICE;
-      break;
-    case 1:
-      price.min = BUNGALO_PRICE;
-      break;
-    case 2:
-      price.min = HOUSE_PRICE;
-      break;
-    case 3:
-      price.min = PALACE_PRICE;
-      break;
+  // Измерение времени заезда и выезда
+  timeOut.addEventListener('change', function () {
+    getSelectedOption(timeOut, timeIn);
+  });
+  timeIn.addEventListener('change', function () {
+    getSelectedOption(timeIn, timeOut);
+  });
+
+  // Изменение количества гостей в зависимости от количества комнат
+  roomsNumber.addEventListener('change', function () {
+    getSelectedOption(roomsNumber, guestsNumber);
+    disabledGuests();
+  });
+};
+
+// Окрашивает бордер
+var checkValidityField = function (element) {
+  for (var i = 0; i < element.length; i++) {
+    if (!element[i].validity.valid) {
+      element[i].style.border = '2px solid red';
+    } else {
+      element[i].style.border = '2px solid green';
+    }
   }
 };
-typeHouse.addEventListener('change', onTypeHouseChange);
-
-//  Изменение количества гостей в зависимости от количества комнат
-var onNumRoomsChange = function () {
-  switch (roomsNumber.selectedIndex) {
-    case 0:
-      guestsNumber.selectedIndex = 2;
-      break;
-    case 1:
-      guestsNumber.selectedIndex = 1;
-      break;
-    case 2:
-      guestsNumber.selectedIndex = 0;
-      break;
-    case 3:
-      guestsNumber.selectedIndex = 3;
-  }
+var onBorderInvalid = function () {
+  var inputAll = form.querySelector('input');
+  var selectAll = form.querySelector('select');
+  checkValidityField(inputAll);
+  checkValidityField(selectAll);
 };
-roomsNumber.addEventListener('change', onNumRoomsChange);
 
+form.addEventListener('invalid', onBorderInvalid);
 // Отправка формы
-submit.addEventListener('submit', function (evt) {
+form.addEventListener('submit', function (evt) {
   evt.preventDefault();
+  price.addEventListener('invalid', function () {
+    validityPriceValue();
+  });
+  title.addEventListener('invalid', function () {
+    validityTitleValue();
+  });
+  onBorderInvalid();
 });
+
+changeEvents();
