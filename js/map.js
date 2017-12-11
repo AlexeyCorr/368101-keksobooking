@@ -366,24 +366,19 @@ var price = form.querySelector('#price');
 var roomsNumber = form.querySelector('#room_number');
 var guestsNumber = form.querySelector('#capacity');
 var submit = form.querySelector('.form__submit');
-var titleAndPrice = [title, price];
+var validFields = [title, price];
 // Получить выбранный option1 в зависимости выбранного option2
 var getSelectedOption = function (select1, select2) {
   select2.options[select1.selectedIndex].selected = 'selected';
 };
 
 // Создает кастомное сообщение об ошибки
-var validityInputValue = function (element) {
+var getCustomMessage = function (element) {
   if (element.validity.rangeUnderflow) {
     element.setCustomValidity('Минимально допустимая цена: ' + element.min + '.');
   } else if (element.validity.rangeOverflow) {
     element.setCustomValidity('Максимально допустимая цена: ' + element.max + '.');
-  } else if (element.validity.valueMissing) {
-    element.setCustomValidity('Необходимо ввести цену');
-  } else {
-    element.setCustomValidity('');
-  }
-  if (element.validity.tooShort) {
+  } else if (element.validity.tooShort) {
     element.setCustomValidity('Минимально допустимое количество символов: ' + element.minLength + '.');
   } else if (element.validity.tooLong) {
     element.setCustomValidity('Мaксимально допустимое количество символов: ' + element.maxLength + '.');
@@ -392,18 +387,19 @@ var validityInputValue = function (element) {
   } else {
     element.setCustomValidity('');
   }
-  element.style.border = '1px solid red';
+  element.style.borderColor = 'red';
 };
 
 //  Добавляет неактивные поля
-var disabledGuests = function () {
-  Array.prototype.forEach.call(guestsNumber.options, function (guest) {
-    if (numbersOfRoom[roomsNumber.value].indexOf(guest.value) >= 0) {
-      guest.disabled = false;
+var disableGuests = function () {
+  var option = guestsNumber.options;
+  for (var i = 0; i < option.length; i++) {
+    if (numbersOfRoom[roomsNumber.value].indexOf(option[i].value) >= 0) {
+      option[i].disabled = false;
     } else {
-      guest.disabled = true;
+      option[i].disabled = true;
     }
-  });
+  }
 };
 
 var changeEvents = function () {
@@ -424,7 +420,7 @@ var changeEvents = function () {
   // Изменение количества гостей в зависимости от количества комнат
   roomsNumber.addEventListener('change', function () {
     getSelectedOption(roomsNumber, guestsNumber);
-    disabledGuests();
+    disableGuests();
   });
 };
 
@@ -432,7 +428,7 @@ var changeEvents = function () {
 var checkValidityField = function (element) {
   for (var i = 0; i < element.length; i++) {
     if (!element[i].validity.valid) {
-      validityInputValue(element[i]);
+      getCustomMessage(element[i]);
     } else {
       element[i].setCustomValidity('');
       element[i].style.borderColor = '#d9d9d3';
@@ -443,7 +439,6 @@ var checkValidityField = function (element) {
 changeEvents();
 
 // Отправка формы
-submit.addEventListener('click', function (evt) {
-  evt.preventDefault();
-  checkValidityField(titleAndPrice);
+submit.addEventListener('click', function () {
+  checkValidityField(validFields);
 });
