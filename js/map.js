@@ -431,7 +431,6 @@ var checkFieldValidity = function (fields) {
     if (!fields[i].validity.valid) {
       getCustomMessage(fields[i]);
     } else {
-      fields[i].setCustomValidity('');
       fields[i].style.borderColor = '#d9d9d3';
     }
   }
