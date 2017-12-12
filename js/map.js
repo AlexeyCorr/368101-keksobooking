@@ -175,19 +175,6 @@ var getRoomsAndGuests = function () {
   return amountRoomsAndGuests;
 };
 
-// Получение типа помещения
-var drawTypeHouse = function (typeHouse) {
-  switch (typeHouse) {
-    case 'flat':
-      return 'Квартира';
-    case 'house':
-      return 'Дом';
-    case 'bungalo':
-      return 'Бунгало';
-  }
-  return typeHouse;
-};
-
 // Получение Одного объявления
 var createAdvert = function () {
   var advert = {
@@ -257,6 +244,19 @@ var drawMapPin = function () {
     fragment.appendChild(createMapPin(advertArray[i]));
   }
   mapPin.appendChild(fragment);
+};
+
+// Получение типа помещения
+var drawTypeHouse = function (typeHouse) {
+  switch (typeHouse) {
+    case 'flat':
+      return 'Квартира';
+    case 'house':
+      return 'Дом';
+    case 'bungalo':
+      return 'Бунгало';
+  }
+  return typeHouse;
 };
 
 // Создание доски с объявлением
@@ -358,15 +358,15 @@ var numbersOfRoom = {
   100: ['0']
 };
 var form = document.querySelector('.notice__form');
-var title = form.querySelector('#title');
-var timeIn = form.querySelector('#timein');
-var timeOut = form.querySelector('#timeout');
-var typeHouse = form.querySelector('#type');
-var price = form.querySelector('#price');
-var roomsNumber = form.querySelector('#room_number');
-var guestsNumber = form.querySelector('#capacity');
-var submit = form.querySelector('.form__submit');
-var validFields = [title, price];
+var fieldTitle = form.querySelector('#title');
+var fieldTimeIn = form.querySelector('#timein');
+var fieldTimeOut = form.querySelector('#timeout');
+var fieldTypeOfHouse = form.querySelector('#type');
+var fieldPrice = form.querySelector('#price');
+var fieldNumberOfRooms = form.querySelector('#room_number');
+var fieldNumberOfGuests = form.querySelector('#capacity');
+var submitButton = form.querySelector('.form__submit');
+var fieldsForValidity = [fieldTitle, fieldPrice];
 // Получить выбранный option1 в зависимости выбранного option2
 var getSelectedOption = function (select1, select2) {
   select2.options[select1.selectedIndex].selected = 'selected';
@@ -392,9 +392,9 @@ var getCustomMessage = function (element) {
 
 //  Добавляет неактивные поля
 var disableGuests = function () {
-  var option = guestsNumber.options;
+  var option = fieldNumberOfGuests.options;
   for (var i = 0; i < option.length; i++) {
-    if (numbersOfRoom[roomsNumber.value].indexOf(option[i].value) >= 0) {
+    if (numbersOfRoom[fieldNumberOfRooms.value].indexOf(option[i].value) >= 0) {
       option[i].disabled = false;
     } else {
       option[i].disabled = true;
@@ -402,24 +402,25 @@ var disableGuests = function () {
   }
 };
 
-var changeEvents = function () {
+//
+var changeValueOfFields = function () {
   //  Изменение типа жилья в зависимости от цены
-  typeHouse.addEventListener('change', function () {
-    price.min = houseMinPrice[typeHouse.value];
-    price.placeholder = price.min;
+  fieldTypeOfHouse.addEventListener('change', function () {
+    fieldPrice.min = houseMinPrice[fieldTypeOfHouse.value];
+    fieldPrice.placeholder = fieldPrice.min;
   });
 
   // Измерение времени заезда и выезда
-  timeOut.addEventListener('change', function () {
-    getSelectedOption(timeOut, timeIn);
+  fieldTimeOut.addEventListener('change', function () {
+    getSelectedOption(fieldTimeOut, fieldTimeIn);
   });
-  timeIn.addEventListener('change', function () {
-    getSelectedOption(timeIn, timeOut);
+  fieldTimeIn.addEventListener('change', function () {
+    getSelectedOption(fieldTimeIn, fieldTimeOut);
   });
 
   // Изменение количества гостей в зависимости от количества комнат
-  roomsNumber.addEventListener('change', function () {
-    getSelectedOption(roomsNumber, guestsNumber);
+  fieldNumberOfRooms.addEventListener('change', function () {
+    getSelectedOption(fieldNumberOfRooms, fieldNumberOfGuests);
     disableGuests();
   });
 };
@@ -436,9 +437,9 @@ var checkFieldValidity = function (fields) {
   }
 };
 
-changeEvents();
+changeValueOfFields();
 
 // Отправка формы
-submit.addEventListener('click', function () {
-  checkFieldValidity(validFields);
+submitButton.addEventListener('click', function () {
+  checkFieldValidity(fieldsForValidity);
 });
