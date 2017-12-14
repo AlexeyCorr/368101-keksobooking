@@ -70,7 +70,7 @@
       hideAdvert();
     }
     selectedPin = target;
-    advertCard = createAdvertBoard(window.map.advertArray[targetIndex]);
+    advertCard = createAdvertBoard(window.data.adverts[targetIndex]);
     map.insertBefore(advertCard, map.querySelector('.map__filters-container'));
     selectedPin.classList.add('map__pin--active');
     buttonClose.addEventListener('click', function () {

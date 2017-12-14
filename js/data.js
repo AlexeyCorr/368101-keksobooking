@@ -185,12 +185,17 @@
     return advert;
   };
 
-  window.data = {
-    // Получение массива с объявлениями
-    getAdvertArray: function (array) {
-      for (var i = 0; i < ADVERT_OPTIONS.amount; i++) {
-        array[i] = createAdvert();
-      }
+
+  // Получение массива с объявлениями
+  var getAdverts = function () {
+    var adverts = [];
+    for (var i = 0; i < ADVERT_OPTIONS.amount; i++) {
+      adverts[i] = createAdvert();
     }
+    return adverts;
+  };
+
+  window.data = {
+    adverts: getAdverts()
   };
 })();
