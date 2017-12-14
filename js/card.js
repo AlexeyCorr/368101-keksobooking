@@ -70,12 +70,12 @@
       hideAdvert();
     }
     selectedPin = target;
-    advertCard = createAdvertBoard(window.data.advertArray[targetIndex]);
+    advertCard = createAdvertBoard(window.map.advertArray[targetIndex]);
     map.insertBefore(advertCard, map.querySelector('.map__filters-container'));
     selectedPin.classList.add('map__pin--active');
-    // buttonClose.addEventListener('click', function () {
-    //   popupClose();
-    // });
+    buttonClose.addEventListener('click', function () {
+      popupClose();
+    });
     document.addEventListener('keydown', function (evt) {
       window.util.isEscEvent(evt, popupClose);
     });
@@ -91,9 +91,5 @@
       }
       target = target.parentNode;
     }
-  });
-
-  buttonClose.addEventListener('click', function () {
-    popupClose();
-  });
+  }, true);
 })();

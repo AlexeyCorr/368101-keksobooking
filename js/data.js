@@ -187,11 +187,10 @@
 
   window.data = {
     // Получение массива с объявлениями
-    getAdvertArray: function () {
+    getAdvertArray: function (array) {
       for (var i = 0; i < ADVERT_OPTIONS.amount; i++) {
-        window.data.advertArray[i] = createAdvert();
+        array[i] = createAdvert();
       }
-    },
-    advertArray: []
+    }
   };
 })();

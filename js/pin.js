@@ -8,7 +8,7 @@
     mapPinElement.style.left = advert.location.x + 'px';
     mapPinElement.style.top = advert.location.y + 'px';
     mapPinElement.querySelector('img').src = advert.author.avatar;
-    mapPinElement.dataset.index = window.data.advertArray.indexOf(advert);
+    mapPinElement.dataset.index = window.map.advertArray.indexOf(advert);
 
     return mapPinElement;
   };
@@ -19,8 +19,8 @@
       var fragment = document.createDocumentFragment();
       var mapPin = document.querySelector('.map__pins');
 
-      for (var i = 0; i < window.data.advertArray.length; i++) {
-        fragment.appendChild(createMapPin(window.data.advertArray[i]));
+      for (var i = 0; i < window.map.advertArray.length; i++) {
+        fragment.appendChild(createMapPin(window.map.advertArray[i]));
       }
       mapPin.appendChild(fragment);
     }
