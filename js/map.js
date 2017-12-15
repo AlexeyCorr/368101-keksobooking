@@ -4,11 +4,6 @@
   var map = document.querySelector('.map');
   var mapPinMain = document.querySelector('.map__pin--main');
 
-  // Массив с объявлениями
-  window.map = {
-    advertArray: []
-  };
-
   // Активация карты и формы
   var onButtonMouseUp = function () {
     var form = document.querySelector('.notice__form');
@@ -19,7 +14,6 @@
       formFields[i].disabled = false;
     }
     window.util.removeClass(map, 'map--faded');
-    window.data.getAdvertArray(window.map.advertArray);
     window.pin.drawMapPin();
 
     mapPinMain.removeEventListener('mouseup', onButtonMouseUp);
