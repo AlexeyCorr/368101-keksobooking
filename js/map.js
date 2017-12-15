@@ -14,7 +14,6 @@
       formFields[i].disabled = false;
     }
     window.util.removeClass(map, 'map--faded');
-    window.data.adverts;
     window.pin.drawMapPin();
 
     mapPinMain.removeEventListener('mouseup', onButtonMouseUp);
