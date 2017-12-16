@@ -7,7 +7,7 @@
     house: 5000,
     palace: 10000
   };
-  var numbersOfRoom = {
+  var numberOfRooms = {
     1: ['1'],
     2: ['2', '1'],
     3: ['3', '2', '1'],
@@ -26,7 +26,7 @@
 
   // Получить выбранный option1 в зависимости выбранного option2
   var getSelectedOption = function (select1, select2) {
-    select2.options[select1.selectedIndex].selected = 'selected';
+    select2.options[select1.selectedIndex].selected = true;
   };
 
   // Создает кастомное сообщение об ошибки
@@ -51,7 +51,7 @@
   var disableGuests = function () {
     var option = fieldNumberOfGuests.options;
     for (var i = 0; i < option.length; i++) {
-      if (numbersOfRoom[fieldNumberOfRooms.value].indexOf(option[i].value) >= 0) {
+      if (numberOfRooms[fieldNumberOfRooms.value].indexOf(option[i].value) >= 0) {
         option[i].disabled = false;
       } else {
         option[i].disabled = true;
