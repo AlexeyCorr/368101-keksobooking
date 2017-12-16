@@ -15,7 +15,7 @@
 
   window.pin = {
     // Отрисовка маркеров на карте
-    drawMapPin: function () {
+    drawMapPins: function () {
       var fragment = document.createDocumentFragment();
       var mapPin = document.querySelector('.map__pins');
 

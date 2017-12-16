@@ -11,17 +11,14 @@
   };
 
   // Смещение пина
-  var pinOffset = {
-    x: PIN_MAIN_PARAMS.width / 2,
-    y: PIN_MAIN_PARAMS.height / 2 + PIN_MAIN_PARAMS.arrowHeight
-  };
+  var pinOffsetY = PIN_MAIN_PARAMS.height / 2 + PIN_MAIN_PARAMS.arrowHeight;
 
   // Ограничения координат
   var MAP_CONTAINER = {
-    top: window.data.location.y.min + pinOffset.y,
-    bottom: window.data.location.y.max + pinOffset.y,
-    left: window.data.location.x.min - pinOffset.x,
-    right: window.data.location.x.max + pinOffset.x
+    top: window.data.location.y.min + pinOffsetY,
+    bottom: window.data.location.y.max + pinOffsetY,
+    left: window.data.location.x.min,
+    right: window.data.location.x.max
   };
 
   // Реализация перетаскивания
@@ -43,7 +40,7 @@
 
       var currentCoors = {
         x: mapPinMain.offsetLeft - shift.x,
-        y: mapPinMain.offsetTop - shift.y
+        y: (mapPinMain.offsetTop - shift.y)
       };
 
       if (currentCoors.x < MAP_CONTAINER.left) {
@@ -67,7 +64,7 @@
       mapPinMain.style.top = currentCoors.y + 'px';
       mapPinMain.style.left = currentCoors.x + 'px';
 
-      fieldAddress.value = 'x: ' + currentCoors.x + 'px, y: ' + currentCoors.y + 'px';
+      fieldAddress.value = 'x: ' + currentCoors.x + 'px, y: ' + (currentCoors.y - pinOffsetY) + 'px';
     };
     // Активация карты и формы
     var onMouseUp = function (upEvt) {
