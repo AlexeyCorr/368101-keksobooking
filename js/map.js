@@ -9,12 +9,6 @@
     width: 66,
     arrowHeight: 22
   };
-  var LOCATION_BORDERS = {
-    yMin: 100,
-    yMax: 500,
-    xMin: 300,
-    xMax: 900
-  };
 
   // Смещение пина
   var pinOffset = {
@@ -24,10 +18,10 @@
 
   // Ограничения координат
   var MAP_CONTAINER = {
-    top: LOCATION_BORDERS.yMin + pinOffset.y,
-    bottom: LOCATION_BORDERS.yMax + pinOffset.y,
-    left: LOCATION_BORDERS.xMin - pinOffset.x,
-    right: LOCATION_BORDERS.xMax + pinOffset.x
+    top: window.data.location.y.min + pinOffset.y,
+    bottom: window.data.location.y.max + pinOffset.y,
+    left: window.data.location.x.min - pinOffset.x,
+    right: window.data.location.x.max + pinOffset.x
   };
 
   // Реализация перетаскивания

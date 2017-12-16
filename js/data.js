@@ -196,6 +196,16 @@
   };
 
   window.data = {
+    location: {
+      x: {
+        min: ADVERT_OPTIONS.location.x.min,
+        max: ADVERT_OPTIONS.location.x.max
+      },
+      y: {
+        min: ADVERT_OPTIONS.location.y.min,
+        max: ADVERT_OPTIONS.location.y.max
+      }
+    },
     adverts: getAdverts()
   };
 })();
