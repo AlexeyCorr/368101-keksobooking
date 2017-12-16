@@ -1,12 +1,6 @@
 'use strict';
 
 (function () {
-  var houseMinPrice = {
-    bungalo: 0,
-    flat: 1000,
-    house: 5000,
-    palace: 10000
-  };
   var numberOfRooms = {
     1: ['1'],
     2: ['2', '1'],
@@ -23,10 +17,12 @@
   var fieldNumberOfGuests = form.querySelector('#capacity');
   var submitButton = form.querySelector('.form__submit');
   var fieldsForValidity = [fieldTitle, fieldPrice];
-
-  // Получить выбранный option1 в зависимости выбранного option2
-  var getSelectedOption = function (select1, select2) {
-    select2.options[select1.selectedIndex].selected = true;
+  var VALUE_FIELDS = {
+    times: ['12:00', '13:00', '14:00'],
+    types: ['bungalo', 'flat', 'house', 'palace'],
+    rooms: ['1', '2', '3', '100'],
+    guests: ['1', '2', '3', '0'],
+    prices: ['0', '1000', '5000', '10000']
   };
 
   // Создает кастомное сообщение об ошибки
@@ -59,25 +55,36 @@
     }
   };
 
-  //
+  var syncValues = function (element, value) {
+    element.value = value;
+  };
+
+  var syncValueWithMin = function (element, value) {
+    element.min = value;
+    if (element.placeholder) {
+      element.placeholder = value;
+    }
+  };
+
+  // Изменение полей формы
   var changeValueOfFields = function () {
     //  Изменение типа жилья в зависимости от цены
+
     fieldTypeOfHouse.addEventListener('change', function () {
-      fieldPrice.min = houseMinPrice[fieldTypeOfHouse.value];
-      fieldPrice.placeholder = fieldPrice.min;
+      window.synchronizeFields(fieldTypeOfHouse, fieldPrice, VALUE_FIELDS.types, VALUE_FIELDS.prices, syncValueWithMin);
     });
 
     // Измерение времени заезда и выезда
     fieldTimeOut.addEventListener('change', function () {
-      getSelectedOption(fieldTimeOut, fieldTimeIn);
+      window.synchronizeFields(fieldTimeOut, fieldTimeIn, VALUE_FIELDS.times, VALUE_FIELDS.times, syncValues);
     });
     fieldTimeIn.addEventListener('change', function () {
-      getSelectedOption(fieldTimeIn, fieldTimeOut);
+      window.synchronizeFields(fieldTimeIn, fieldTimeOut, VALUE_FIELDS.times, VALUE_FIELDS.times, syncValues);
     });
 
     // Изменение количества гостей в зависимости от количества комнат
     fieldNumberOfRooms.addEventListener('change', function () {
-      getSelectedOption(fieldNumberOfRooms, fieldNumberOfGuests);
+      window.synchronizeFields(fieldNumberOfRooms, fieldNumberOfGuests, VALUE_FIELDS.rooms, VALUE_FIELDS.guests, syncValues);
       disableGuests();
     });
   };

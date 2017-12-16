@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var advertCard = null;
+  // var advertCard = null;
   var map = document.querySelector('.map');
   var similarAdvertTemplate = document.querySelector('template').content.querySelector('.map__card');
   var similarAdvert = similarAdvertTemplate.cloneNode(true);
@@ -45,51 +45,20 @@
     return similarAdvert;
   };
 
-  var hideAdvert = function () {
-    if (advertCard) {
-      map.removeChild(advertCard);
-      advertCard = null;
-    }
-  };
-
-  var popupClose = function () {
-    hideAdvert();
-    selectedPin.classList.remove('map__pin--active');
-    document.removeEventListener('keydown', function (evt) {
-      window.util.isEscEvent(evt, popupClose);
-    });
-  };
-
-  // Переключение пинов
-  var selectedPin;
-  var changeTargetPin = function (target) {
-    var targetIndex = target.dataset.index;
-
-    if (selectedPin) {
-      selectedPin.classList.remove('map__pin--active');
-      hideAdvert();
-    }
-    selectedPin = target;
-    advertCard = createAdvertBoard(window.data.adverts[targetIndex]);
-    map.insertBefore(advertCard, map.querySelector('.map__filters-container'));
-    selectedPin.classList.add('map__pin--active');
-    buttonClose.addEventListener('click', function () {
-      popupClose();
-    });
-    document.addEventListener('keydown', function (evt) {
-      window.util.isEscEvent(evt, popupClose);
-    });
-  };
-
+  // Показывает объявление при клике на пин
   map.addEventListener('click', function (evt) {
     var target = evt.target;
 
     while (target !== map) {
       if (target.classList.contains('map__pin') && !target.classList.contains('map__pin--main')) {
-        changeTargetPin(target);
+        window.showCard.showAdvert(target, buttonClose);
         return;
       }
       target = target.parentNode;
     }
   }, true);
+
+  window.card = {
+    createAdvertBoard: createAdvertBoard
+  };
 })();
