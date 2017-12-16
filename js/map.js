@@ -40,7 +40,7 @@
 
       var currentCoors = {
         x: mapPinMain.offsetLeft - shift.x,
-        y: (mapPinMain.offsetTop - shift.y)
+        y: mapPinMain.offsetTop - shift.y
       };
 
       if (currentCoors.x < MAP_CONTAINER.left) {
