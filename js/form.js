@@ -15,6 +15,7 @@
   };
   var form = document.querySelector('.notice__form');
   var fieldTitle = form.querySelector('#title');
+  // var fieldAddress = form.querySelector('#address');
   var fieldTimeIn = form.querySelector('#timein');
   var fieldTimeOut = form.querySelector('#timeout');
   var fieldTypeOfHouse = form.querySelector('#type');
