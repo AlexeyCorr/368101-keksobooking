@@ -70,7 +70,9 @@
       fieldAddress.value = 'x: ' + currentCoors.x + 'px, y: ' + currentCoors.y + 'px';
     };
     // Активация карты и формы
-    var onMouseUp = function () {
+    var onMouseUp = function (upEvt) {
+      upEvt.preventDefault();
+
       var form = document.querySelector('.notice__form');
       var formFields = document.querySelectorAll('fieldset');
 
@@ -79,7 +81,7 @@
         formFields[i].disabled = false;
       }
       window.util.removeClass(map, 'map--faded');
-      window.pin.drawMapPin();
+      window.pin.drawMapPins();
 
       map.removeEventListener('mousemove', onMouseMove);
       map.removeEventListener('mouseup', onMouseUp);
