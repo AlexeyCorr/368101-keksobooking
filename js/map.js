@@ -2,7 +2,7 @@
 
 (function () {
   var map = document.querySelector('.map');
-  var mapPinMain = document.querySelector('.map__pin--main');
+  var mapPinMain = map.querySelector('.map__pin--main');
   var fieldAddress = document.querySelector('#address');
   var PIN_MAIN_PARAMS = {
     height: 66,
@@ -81,12 +81,12 @@
       window.util.removeClass(map, 'map--faded');
       window.pin.drawMapPin();
 
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
+      map.removeEventListener('mousemove', onMouseMove);
+      map.removeEventListener('mouseup', onMouseUp);
     };
 
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
+    map.addEventListener('mousemove', onMouseMove);
+    map.addEventListener('mouseup', onMouseUp);
   });
 
 })();
