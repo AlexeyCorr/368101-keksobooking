@@ -55,10 +55,10 @@
     }
   };
 
+  // Фунукции для синхронизации значений
   var syncValues = function (element, value) {
     element.value = value;
   };
-
   var syncValueWithMin = function (element, value) {
     element.min = value;
     if (element.placeholder) {
@@ -69,7 +69,6 @@
   // Изменение полей формы
   var changeValueOfFields = function () {
     //  Изменение типа жилья в зависимости от цены
-
     fieldTypeOfHouse.addEventListener('change', function () {
       window.synchronizeFields(fieldTypeOfHouse, fieldPrice, VALUE_FIELDS.types, VALUE_FIELDS.prices, syncValueWithMin);
     });

@@ -3,7 +3,6 @@
 (function () {
   var advertCard = null;
   var map = document.querySelector('.map');
-  // var buttonClose = similarAdvert.querySelector('.popup__close');
 
   var hideAdvert = function () {
     if (advertCard) {
@@ -22,7 +21,7 @@
 
   // Функция показа объявления
   var selectedPin;
-  var showAdvert = function (target, buttonClose) {
+  var showAdvert = function (target) {
     var targetIndex = target.dataset.index;
 
     if (selectedPin) {
@@ -32,6 +31,7 @@
     selectedPin = target;
     advertCard = window.card.createAdvertBoard(window.data.adverts[targetIndex]);
     map.insertBefore(advertCard, map.querySelector('.map__filters-container'));
+    var buttonClose = advertCard.querySelector('.popup__close');
     selectedPin.classList.add('map__pin--active');
     buttonClose.addEventListener('click', function () {
       popupClose();
@@ -41,7 +41,5 @@
     });
   };
 
-  window.showCard = {
-    showAdvert: showAdvert
-  };
+  window.showCard = showAdvert;
 })();

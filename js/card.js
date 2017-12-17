@@ -5,7 +5,7 @@
   var map = document.querySelector('.map');
   var similarAdvertTemplate = document.querySelector('template').content.querySelector('.map__card');
   var similarAdvert = similarAdvertTemplate.cloneNode(true);
-  var buttonClose = similarAdvert.querySelector('.popup__close');
+  // var buttonClose = similarAdvert.querySelector('.popup__close');
 
   // Создание нового списка особенностей
   var createNewListFeatures = function (features, list) {
@@ -51,7 +51,7 @@
 
     while (target !== map) {
       if (target.classList.contains('map__pin') && !target.classList.contains('map__pin--main')) {
-        window.showCard.showAdvert(target, buttonClose);
+        window.showCard(target);
         return;
       }
       target = target.parentNode;
