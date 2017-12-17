@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-  // var advertCard = null;
   var map = document.querySelector('.map');
   var similarAdvertTemplate = document.querySelector('template').content.querySelector('.map__card');
   var similarAdvert = similarAdvertTemplate.cloneNode(true);
