@@ -29,7 +29,7 @@
       hideAdvert();
     }
     selectedPin = target;
-    advertCard = window.card.createAdvertBoard(window.data.adverts[targetIndex]);
+    advertCard = window.card.createAdvertBoard(window.map.adverts[targetIndex]);
     map.insertBefore(advertCard, map.querySelector('.map__filters-container'));
     var buttonClose = advertCard.querySelector('.popup__close');
     selectedPin.classList.add('map__pin--active');

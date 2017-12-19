@@ -10,6 +10,8 @@
     404: 'Ничего не найдено',
     500: 'Внутренняя ошибка сервера'
   };
+
+  var CODE_OK = 200;
   var createRequest = function (onLoad, onError) {
     var xhr = new XMLHttpRequest();
 
@@ -17,7 +19,7 @@
     xhr.timeout = 10000;
 
     xhr.addEventListener('load', function () {
-      if (xhr.status === 200) {
+      if (xhr.status === CODE_OK) {
         onLoad(xhr.response);
       } else {
         onError('Код ошибки: ' + xhr.status + ': ' + errorTexts[xhr.status]);
@@ -38,14 +40,14 @@
   var load = function (onLoad, onError) {
     var xhr = createRequest(onLoad, onError);
 
-    xhr.open('GET', SERVER_URL + '/data');
+    xhr.open('GET', SERVER_URL + '/data', true);
     xhr.send();
   };
 
   var save = function (data, onLoad, onError) {
     var xhr = createRequest(onLoad, onError);
 
-    xhr.open('POST', SERVER_URL);
+    xhr.open('POST', SERVER_URL, true);
     xhr.send(data);
   };
 

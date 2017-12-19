@@ -4,10 +4,21 @@
   var map = document.querySelector('.map');
   var mapPinMain = map.querySelector('.map__pin--main');
   var fieldAddress = document.querySelector('#address');
+  var mapPinsFragment = null;
   var PIN_MAIN_PARAMS = {
     height: 66,
     width: 66,
     arrowHeight: 22
+  };
+  var LOCATION_LIMITATIONS = {
+    x: {
+      min: 300,
+      max: 900
+    },
+    y: {
+      min: 100,
+      max: 500
+    }
   };
 
   // Смещение пина
@@ -15,10 +26,10 @@
 
   // Ограничения координат
   var MAP_CONTAINER = {
-    top: window.data.location.y.min + pinOffsetY,
-    bottom: window.data.location.y.max + pinOffsetY,
-    left: window.data.location.x.min,
-    right: window.data.location.x.max
+    top: LOCATION_LIMITATIONS.y.min + pinOffsetY,
+    bottom: LOCATION_LIMITATIONS.y.max + pinOffsetY,
+    left: LOCATION_LIMITATIONS.x.min,
+    right: LOCATION_LIMITATIONS.x.max
   };
 
   // Реализация перетаскивания
@@ -88,4 +99,28 @@
     map.addEventListener('mouseup', onMouseUp);
   });
 
+  var adverts = [];
+  var successHandler = function (advertsData) {
+
+    for (var i = 0; i < advertsData.length; i++) {
+      adverts.push(advertsData[i]);
+    }
+  };
+
+  var errorHandler = function (errorMessage) {
+    var node = document.createElement('div');
+    node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
+    node.style.position = 'fixed';
+    node.style.left = '50%';
+    node.style.right = 0;
+    node.style.fontSize = '30px';
+    node.textContent = errorMessage;
+    document.body.insertAdjacentElement('afterbegin', node);
+  };
+
+  window.backend.load(successHandler, errorHandler);
+
+  window.map = {
+    adverts: adverts
+  };
 })();

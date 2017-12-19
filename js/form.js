@@ -100,7 +100,7 @@
   };
 
   // Создание поля с ошибкой
-  var errorHendler = function (errorMessage) {
+  var errorHandler = function (errorMessage) {
     var node = document.querySelector('div');
     node.style = 'z-index: 100; margin: 0 auto; padding: 10px; text-align: center; background-color: #f12b6b; color: #fff;';
     node.style.position = 'absolute';
@@ -112,7 +112,7 @@
     form.insertAdjacentElement('afterEnd', node);
   };
 
-  var successHendler = function () {
+  var successHandler = function () {
     var node = document.querySelector('div');
     node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: #f12b6b; color: #fff;';
     node.style.position = 'absolute';
@@ -133,6 +133,6 @@
 
   form.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    window.backend.save(new FormData(form), successHendler, errorHendler);
+    window.backend.save(new FormData(form), successHandler, errorHandler);
   });
 })();
