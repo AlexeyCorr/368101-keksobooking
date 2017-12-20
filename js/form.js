@@ -99,10 +99,28 @@
     }
   };
 
+  // Создание сообщения об ошибки
+  var errorHandler = function (errorMessage) {
+    var errorPopup = window.messagePopup.error(errorMessage);
+    document.querySelector('body').appendChild(errorPopup);
+  };
+
+  // Создание сообщения об успешной отправки данных
+  var successHandler = function () {
+    var successPopup = window.messagePopup.success();
+    document.querySelector('body').appendChild(successPopup);
+    form.reset();
+  };
+
   changeValueOfFields();
 
   // Отправка формы
   submitButton.addEventListener('click', function () {
     checkFieldValidity(fieldsForValidity);
+  });
+
+  form.addEventListener('submit', function (evt) {
+    window.backend.save(new FormData(form), successHandler, errorHandler);
+    evt.preventDefault();
   });
 })();

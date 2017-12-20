@@ -4,10 +4,21 @@
   var map = document.querySelector('.map');
   var mapPinMain = map.querySelector('.map__pin--main');
   var fieldAddress = document.querySelector('#address');
+
   var PIN_MAIN_PARAMS = {
     height: 66,
     width: 66,
     arrowHeight: 22
+  };
+  var LOCATION_LIMITATIONS = {
+    x: {
+      min: 300,
+      max: 900
+    },
+    y: {
+      min: 100,
+      max: 500
+    }
   };
 
   // Смещение пина
@@ -15,10 +26,21 @@
 
   // Ограничения координат
   var MAP_CONTAINER = {
-    top: window.data.location.y.min + pinOffsetY,
-    bottom: window.data.location.y.max + pinOffsetY,
-    left: window.data.location.x.min,
-    right: window.data.location.x.max
+    top: LOCATION_LIMITATIONS.y.min + pinOffsetY,
+    bottom: LOCATION_LIMITATIONS.y.max + pinOffsetY,
+    left: LOCATION_LIMITATIONS.x.min,
+    right: LOCATION_LIMITATIONS.x.max
+  };
+
+  // Разблокирование карты
+  var unlockMap = function () {
+    var form = document.querySelector('.notice__form');
+    var formFields = form.querySelectorAll('fieldset');
+    window.util.removeClass(map, 'map--faded');
+    window.util.removeClass(form, 'notice__form--disabled');
+    for (var i = 0; i < formFields.length; i++) {
+      formFields[i].disabled = false;
+    }
   };
 
   // Реализация перетаскивания
@@ -66,19 +88,13 @@
 
       fieldAddress.value = 'x: ' + currentCoors.x + 'px, y: ' + (currentCoors.y - pinOffsetY) + 'px';
     };
+
     // Активация карты и формы
     var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
 
-      var form = document.querySelector('.notice__form');
-      var formFields = document.querySelectorAll('fieldset');
-
-      window.util.removeClass(form, 'notice__form--disabled');
-      for (var i = 0; i < formFields.length; i++) {
-        formFields[i].disabled = false;
-      }
-      window.util.removeClass(map, 'map--faded');
-      window.pin.drawMapPins();
+      unlockMap();
+      window.data.load();
 
       map.removeEventListener('mousemove', onMouseMove);
       map.removeEventListener('mouseup', onMouseUp);

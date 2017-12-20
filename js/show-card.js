@@ -21,15 +21,13 @@
 
   // Функция показа объявления
   var selectedPin;
-  var showAdvert = function (target) {
-    var targetIndex = target.dataset.index;
-
+  var showAdvert = function (target, adverts) {
     if (selectedPin) {
       selectedPin.classList.remove('map__pin--active');
       hideAdvert();
     }
     selectedPin = target;
-    advertCard = window.card.createAdvertBoard(window.data.adverts[targetIndex]);
+    advertCard = window.card.createAdvertBoard(adverts);
     map.insertBefore(advertCard, map.querySelector('.map__filters-container'));
     var buttonClose = advertCard.querySelector('.popup__close');
     selectedPin.classList.add('map__pin--active');
