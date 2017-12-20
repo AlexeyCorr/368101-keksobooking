@@ -99,29 +99,17 @@
     }
   };
 
-  // Создание поля с ошибкой
+  // Создание сообщения об ошибки
   var errorHandler = function (errorMessage) {
-    var node = document.querySelector('div');
-    node.style = 'z-index: 100; margin: 0 auto; padding: 10px; text-align: center; background-color: #f12b6b; color: #fff;';
-    node.style.position = 'absolute';
-    node.style.left = 0;
-    node.style.right = 0;
-    node.style.fontSize = '30px';
-
-    node.textContent = errorMessage;
-    form.insertAdjacentElement('afterEnd', node);
+    var errorPopup = window.messagePopup.error(errorMessage);
+    document.querySelector('body').appendChild(errorPopup);
   };
 
+  // Создание сообщения об успешной отправки данных
   var successHandler = function () {
-    var node = document.querySelector('div');
-    node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: #f12b6b; color: #fff;';
-    node.style.position = 'absolute';
-    node.style.left = 0;
-    node.style.right = 0;
-    node.style.fontSize = '30px';
-
-    node.textContent = 'Молодец';
-    form.insertAdjacentElement('afterEnd', node);
+    var successPopup = window.messagePopup.success();
+    document.querySelector('body').appendChild(successPopup);
+    form.reset();
   };
 
   changeValueOfFields();
@@ -132,7 +120,7 @@
   });
 
   form.addEventListener('submit', function (evt) {
-    evt.preventDefault();
     window.backend.save(new FormData(form), successHandler, errorHandler);
+    evt.preventDefault();
   });
 })();

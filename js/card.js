@@ -75,7 +75,7 @@
 
     while (target !== map) {
       if (target.classList.contains('map__pin') && !target.classList.contains('map__pin--main')) {
-        window.showCard(target);
+        window.showCard(target, window.data.adverts[target.dataset.index]);
         return;
       }
       target = target.parentNode;

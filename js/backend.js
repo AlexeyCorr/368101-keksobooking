@@ -22,7 +22,7 @@
       if (xhr.status === CODE_OK) {
         onLoad(xhr.response);
       } else {
-        onError('Код ошибки: ' + xhr.status + ': ' + errorTexts[xhr.status]);
+        onError('Код ошибки: ' + xhr.status + ' ' + errorTexts[xhr.status]);
       }
     });
 

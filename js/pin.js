@@ -18,18 +18,18 @@
     mapPinElement.style.left = advert.location.x + 'px';
     mapPinElement.style.top = advert.location.y - pinOffsetY + 'px';
     mapPinElement.querySelector('img').src = advert.author.avatar;
-    mapPinElement.dataset.index = window.map.adverts.indexOf(advert);
+    mapPinElement.dataset.index = window.data.adverts.indexOf(advert);
 
     return mapPinElement;
   };
 
   // Отрисовка маркеров на карте
-  var drawMapPins = function () {
+  var drawMapPins = function (adverts) {
     var fragment = document.createDocumentFragment();
     var mapPin = document.querySelector('.map__pins');
 
-    for (var i = 0; i < window.map.adverts.length; i++) {
-      fragment.appendChild(createMapPin(window.map.adverts[i]));
+    for (var i = 0; i < adverts.length; i++) {
+      fragment.appendChild(createMapPin(adverts[i]));
     }
     mapPin.appendChild(fragment);
   };

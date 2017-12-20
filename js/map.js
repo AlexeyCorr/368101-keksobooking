@@ -4,7 +4,7 @@
   var map = document.querySelector('.map');
   var mapPinMain = map.querySelector('.map__pin--main');
   var fieldAddress = document.querySelector('#address');
-  var mapPinsFragment = null;
+
   var PIN_MAIN_PARAMS = {
     height: 66,
     width: 66,
@@ -30,6 +30,17 @@
     bottom: LOCATION_LIMITATIONS.y.max + pinOffsetY,
     left: LOCATION_LIMITATIONS.x.min,
     right: LOCATION_LIMITATIONS.x.max
+  };
+
+  // Разблокирование карты
+  var unlockMap = function () {
+    var form = document.querySelector('.notice__form');
+    var formFields = form.querySelectorAll('fieldset');
+    window.util.removeClass(map, 'map--faded');
+    window.util.removeClass(form, 'notice__form--disabled');
+    for (var i = 0; i < formFields.length; i++) {
+      formFields[i].disabled = false;
+    }
   };
 
   // Реализация перетаскивания
@@ -77,19 +88,13 @@
 
       fieldAddress.value = 'x: ' + currentCoors.x + 'px, y: ' + (currentCoors.y - pinOffsetY) + 'px';
     };
+
     // Активация карты и формы
     var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
 
-      var form = document.querySelector('.notice__form');
-      var formFields = document.querySelectorAll('fieldset');
-
-      window.util.removeClass(form, 'notice__form--disabled');
-      for (var i = 0; i < formFields.length; i++) {
-        formFields[i].disabled = false;
-      }
-      window.util.removeClass(map, 'map--faded');
-      window.pin.drawMapPins();
+      unlockMap();
+      window.data.load();
 
       map.removeEventListener('mousemove', onMouseMove);
       map.removeEventListener('mouseup', onMouseUp);
@@ -99,28 +104,4 @@
     map.addEventListener('mouseup', onMouseUp);
   });
 
-  var adverts = [];
-  var successHandler = function (advertsData) {
-
-    for (var i = 0; i < advertsData.length; i++) {
-      adverts.push(advertsData[i]);
-    }
-  };
-
-  var errorHandler = function (errorMessage) {
-    var node = document.createElement('div');
-    node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
-    node.style.position = 'fixed';
-    node.style.left = '50%';
-    node.style.right = 0;
-    node.style.fontSize = '30px';
-    node.textContent = errorMessage;
-    document.body.insertAdjacentElement('afterbegin', node);
-  };
-
-  window.backend.load(successHandler, errorHandler);
-
-  window.map = {
-    adverts: adverts
-  };
 })();
