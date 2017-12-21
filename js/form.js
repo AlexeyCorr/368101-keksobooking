@@ -86,6 +86,9 @@
       window.synchronizeFields(fieldNumberOfRooms, fieldNumberOfGuests, VALUE_FIELDS.rooms, VALUE_FIELDS.guests, syncValues);
       disableGuests();
     });
+    fieldNumberOfGuests.addEventListener('change', function () {
+      disableGuests();
+    });
   };
 
   // Проверка валидации
@@ -101,15 +104,21 @@
 
   // Создание сообщения об ошибки
   var errorHandler = function (errorMessage) {
-    var errorPopup = window.messagePopup.error(errorMessage);
+    var errorPopup = window.messagePopup.createErrorMessage(errorMessage);
     document.querySelector('body').appendChild(errorPopup);
+  };
+
+  // Сброс значений формы
+  var resetForm = function () {
+    form.reset();
+    syncValueWithMin(fieldPrice, VALUE_FIELDS.prices[VALUE_FIELDS.types.indexOf('flat')]);
   };
 
   // Создание сообщения об успешной отправки данных
   var successHandler = function () {
-    var successPopup = window.messagePopup.success();
+    var successPopup = window.messagePopup.createSuccessMessage();
     document.querySelector('body').appendChild(successPopup);
-    form.reset();
+    resetForm();
   };
 
   changeValueOfFields();

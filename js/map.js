@@ -4,6 +4,7 @@
   var map = document.querySelector('.map');
   var mapPinMain = map.querySelector('.map__pin--main');
   var fieldAddress = document.querySelector('#address');
+  var mapUnlocked = false;
 
   var PIN_MAIN_PARAMS = {
     height: 66,
@@ -41,6 +42,7 @@
     for (var i = 0; i < formFields.length; i++) {
       formFields[i].disabled = false;
     }
+    mapUnlocked = true;
   };
 
   // Реализация перетаскивания
@@ -92,9 +94,10 @@
     // Активация карты и формы
     var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
-
-      unlockMap();
-      window.data.load();
+      if (!mapUnlocked) {
+        unlockMap();
+        window.data.loadData();
+      }
 
       map.removeEventListener('mousemove', onMouseMove);
       map.removeEventListener('mouseup', onMouseUp);

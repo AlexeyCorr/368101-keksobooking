@@ -67,8 +67,8 @@
   };
 
   window.messagePopup = {
-    error: createErrorMessage,
-    success: createSuccessMessage
+    createErrorMessage: createErrorMessage,
+    createSuccessMessage: createSuccessMessage
   };
 
 })();

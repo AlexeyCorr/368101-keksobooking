@@ -37,6 +37,7 @@
     return xhr;
   };
 
+  // Загрузка данных с сервера
   var load = function (onLoad, onError) {
     var xhr = createRequest(onLoad, onError);
 
@@ -44,6 +45,7 @@
     xhr.send();
   };
 
+  // Отправка данных на сервер
   var save = function (data, onLoad, onError) {
     var xhr = createRequest(onLoad, onError);
 
