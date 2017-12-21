@@ -16,9 +16,9 @@
   };
 
   // Создание списка с фотографиями
-  var createNewListPhoto = function (features, list) {
+  var createNewListPhoto = function (photos, list) {
     list.innerHTML = '';
-    features.forEach(function (feature) {
+    photos.forEach(function (feature) {
       var currentItem = document.createElement('li');
       var currentPhoto = document.createElement('img');
       currentPhoto.src = feature;
