@@ -8,6 +8,8 @@
     arrowHeight: 18
   };
 
+  var MAX_AMOUNT_PINS = 5;
+
   var pinOffsetY = PIN_PARAMS.height / 2 + PIN_PARAMS.arrowHeight;
 
   // Создание маркеров объявлений
@@ -28,7 +30,7 @@
     var fragment = document.createDocumentFragment();
     var mapPin = document.querySelector('.map__pins');
 
-    for (var i = 0; i < adverts.length; i++) {
+    for (var i = 0; i < MAX_AMOUNT_PINS; i++) {
       fragment.appendChild(createMapPin(adverts[i]));
     }
     mapPin.appendChild(fragment);
