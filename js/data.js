@@ -9,7 +9,7 @@
 
   var updateAdverts = function () {
     var mapPins = document.querySelector('.map__pins');
-    var filterAdvarts = window.filter.getFilteredArray(window.data.adverts);
+    var filterAdvarts = window.filter(window.data.adverts);
     window.util.delElem(mapPins);
     window.pin.drawMapPins(filterAdvarts);
   };
