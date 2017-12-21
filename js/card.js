@@ -22,6 +22,9 @@
       var currentItem = document.createElement('li');
       var currentPhoto = document.createElement('img');
       currentPhoto.src = feature;
+      currentPhoto.style.maxWidth = '100%';
+      currentPhoto.style.height = '50px';
+      currentPhoto.style.padding = '5px';
       list.appendChild(currentItem);
       currentItem.appendChild(currentPhoto);
     });
