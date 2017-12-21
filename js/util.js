@@ -2,6 +2,7 @@
 
 (function () {
   var ESC_KEYCODE = 27;
+  var lastTimeout = null;
 
   window.util = {
     // Выполняет определенное действие при нажатии на escape
@@ -15,6 +16,19 @@
       element.classList.remove(className);
 
       return element;
+    },
+    // debounce
+    debounce: function (callback, timeout) {
+      if (lastTimeout) {
+        window.clearTimeout(lastTimeout);
+      }
+      lastTimeout = window.setTimeout(callback, timeout);
+    },
+    // Удаляет элементы
+    delElem: function (elem) {
+      while (elem.hasChildNodes()) {
+        elem.removeChild(elem.childNodes[0]);
+      }
     }
   };
 })();

@@ -7,6 +7,13 @@
     window.pin.drawMapPins(window.data.adverts);
   };
 
+  var updateAdverts = function () {
+    var mapPins = document.querySelector('.map__pins');
+    var filterAdvarts = window.filter.getFilteredArray(window.data.adverts);
+    window.util.delElem(mapPins);
+    window.pin.drawMapPins(filterAdvarts);
+  };
+
   var errorHandler = function (errorMessage) {
     var errorPopup = window.messagePopup.error(errorMessage);
     document.querySelector('body').appendChild(errorPopup);
@@ -17,7 +24,8 @@
   };
 
   window.data = {
-    load: loadData
+    load: loadData,
+    updateAdverts: updateAdverts()
   };
 
 })();

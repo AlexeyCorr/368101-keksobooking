@@ -86,6 +86,9 @@
       window.synchronizeFields(fieldNumberOfRooms, fieldNumberOfGuests, VALUE_FIELDS.rooms, VALUE_FIELDS.guests, syncValues);
       disableGuests();
     });
+    fieldNumberOfGuests.addEventListener('change', function () {
+      window.synchronizeFields(fieldNumberOfGuests, fieldNumberOfRooms, VALUE_FIELDS.guests, VALUE_FIELDS.rooms, syncValues);
+    });
   };
 
   // Проверка валидации
@@ -105,11 +108,16 @@
     document.querySelector('body').appendChild(errorPopup);
   };
 
+  var resetForm = function () {
+    form.reset();
+    syncValueWithMin(fieldPrice, VALUE_FIELDS.prices[VALUE_FIELDS.types.indexOf('flat')]);
+  };
+
   // Создание сообщения об успешной отправки данных
   var successHandler = function () {
     var successPopup = window.messagePopup.success();
     document.querySelector('body').appendChild(successPopup);
-    form.reset();
+    resetForm();
   };
 
   changeValueOfFields();
