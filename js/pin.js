@@ -45,9 +45,7 @@
     advertsCopy.forEach(function (item) {
       fragment.appendChild(createMapPin(item));
     });
-    // for (var i = 0; i < advertsCopy.length; i++) {
-    //   fragment.appendChild(createMapPin(advertsCopy[i]));
-    // }
+
     drawArea.appendChild(fragment);
   };
 
