@@ -48,7 +48,7 @@
     var checkedFuetures = filterForm.querySelectorAll('#housing-features input[type="checkbox"]:checked');
     var filterFields = filterForm.querySelectorAll('.map__filter');
 
-    var activeFilters = Array.from(filterFields).forEach(function (filter) {
+    var activeFilters = Array.from(filterFields).filter(function (filter) {
       return filter.value !== 'any';
     });
 
