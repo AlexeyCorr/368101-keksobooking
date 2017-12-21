@@ -39,5 +39,8 @@
     });
   };
 
-  window.showCard = showAdvert;
+  window.showCard = {
+    showAdvert: showAdvert,
+    hideAdvert: hideAdvert
+  };
 })();

@@ -8,9 +8,10 @@
   };
 
   var updateAdverts = function () {
-    var mapPins = document.querySelector('.map__pins');
+    var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
     var filterAdvarts = window.filter(window.data.adverts);
-    window.util.delElem(mapPins);
+    window.pin.hidePins(mapPins);
+    window.showCard.hideAdvert();
     window.pin.drawMapPins(filterAdvarts);
   };
 

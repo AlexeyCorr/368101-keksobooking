@@ -1,5 +1,6 @@
 'use strict';
 (function () {
+  var mapPinsField = document.querySelector('.map__pins');
 
   // Параметры пина
   var PIN_PARAMS = {
@@ -8,9 +9,17 @@
     arrowHeight: 18
   };
 
-  var MAX_AMOUNT_PINS = 5;
+  var MAX_AMOUNT_ADVERTS = 5;
 
   var pinOffsetY = PIN_PARAMS.height / 2 + PIN_PARAMS.arrowHeight;
+
+  // Удаление пинов на карте
+  var hidePins = function (pins) {
+    Array.from(pins).forEach(function (pin) {
+      mapPinsField.removeChild(pin);
+    });
+    return mapPinsField;
+  };
 
   // Создание маркеров объявлений
   var createMapPin = function (advert) {
@@ -28,15 +37,16 @@
   // Отрисовка маркеров на карте
   var drawMapPins = function (adverts) {
     var fragment = document.createDocumentFragment();
-    var mapPin = document.querySelector('.map__pins');
+    adverts.length = (adverts.length >= MAX_AMOUNT_ADVERTS) ? MAX_AMOUNT_ADVERTS : adverts.length;
 
-    for (var i = 0; i < MAX_AMOUNT_PINS; i++) {
+    for (var i = 0; i < adverts.length; i++) {
       fragment.appendChild(createMapPin(adverts[i]));
     }
-    mapPin.appendChild(fragment);
+    mapPinsField.appendChild(fragment);
   };
 
   window.pin = {
-    drawMapPins: drawMapPins
+    drawMapPins: drawMapPins,
+    hidePins: hidePins
   };
 })();

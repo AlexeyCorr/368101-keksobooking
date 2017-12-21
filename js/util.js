@@ -24,11 +24,5 @@
       }
       lastTimeout = window.setTimeout(callback, timeout);
     },
-    // Удаляет элементы
-    delElem: function (elem) {
-      while (elem.hasChildNodes()) {
-        elem.removeChild(elem.childNodes[0]);
-      }
-    }
   };
 })();
