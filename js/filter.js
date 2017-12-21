@@ -66,7 +66,7 @@
   };
 
   filterForm.addEventListener('change', function () {
-    window.util.debounce(window.data.updateAdverts(), DEBOUNCE_INTERVAL);
+    window.util.debounce(window.data.updateAdverts, DEBOUNCE_INTERVAL);
   });
 
   window.filter = getFilteredArray;

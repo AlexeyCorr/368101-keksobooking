@@ -25,7 +25,7 @@
 
   window.data = {
     load: loadData,
-    updateAdverts: updateAdverts()
+    updateAdverts: updateAdverts
   };
 
 })();
