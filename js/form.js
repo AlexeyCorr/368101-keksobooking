@@ -86,9 +86,7 @@
       window.synchronizeFields(fieldNumberOfRooms, fieldNumberOfGuests, VALUE_FIELDS.rooms, VALUE_FIELDS.guests, syncValues);
       disableGuests();
     });
-    fieldNumberOfGuests.addEventListener('change', function () {
-      disableGuests();
-    });
+
   };
 
   // Проверка валидации
@@ -121,6 +119,7 @@
     resetForm();
   };
 
+  disableGuests();
   changeValueOfFields();
 
   // Отправка формы
