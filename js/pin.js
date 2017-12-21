@@ -1,6 +1,6 @@
 'use strict';
 (function () {
-  var mapPinsField = document.querySelector('.map__pins');
+  var drawArea = document.querySelector('.map__pins');
 
   // Параметры пина
   var PIN_PARAMS = {
@@ -9,16 +9,18 @@
     arrowHeight: 18
   };
 
+  // Максимальное колическо объявлений на карте
   var MAX_AMOUNT_ADVERTS = 5;
 
+  // Смещение пина относительно его высоты
   var pinOffsetY = PIN_PARAMS.height / 2 + PIN_PARAMS.arrowHeight;
 
   // Удаление пинов на карте
-  var hidePins = function (pins) {
+  var removePins = function (pins) {
     Array.from(pins).forEach(function (pin) {
-      mapPinsField.removeChild(pin);
+      drawArea.removeChild(pin);
     });
-    return mapPinsField;
+    return drawArea;
   };
 
   // Создание маркеров объявлений
@@ -42,11 +44,11 @@
     for (var i = 0; i < adverts.length; i++) {
       fragment.appendChild(createMapPin(adverts[i]));
     }
-    mapPinsField.appendChild(fragment);
+    drawArea.appendChild(fragment);
   };
 
   window.pin = {
     drawMapPins: drawMapPins,
-    hidePins: hidePins
+    removePins: removePins
   };
 })();

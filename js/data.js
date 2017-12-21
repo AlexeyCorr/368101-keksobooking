@@ -10,13 +10,13 @@
   var updateAdverts = function () {
     var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
     var filterAdvarts = window.filter(window.data.adverts);
-    window.pin.hidePins(mapPins);
+    window.pin.removePins(mapPins);
     window.showCard.hideAdvert();
     window.pin.drawMapPins(filterAdvarts);
   };
 
   var errorHandler = function (errorMessage) {
-    var errorPopup = window.messagePopup.error(errorMessage);
+    var errorPopup = window.messagePopup.createErrorMessage(errorMessage);
     document.querySelector('body').appendChild(errorPopup);
   };
 
@@ -25,7 +25,7 @@
   };
 
   window.data = {
-    load: loadData,
+    loadData: loadData,
     updateAdverts: updateAdverts
   };
 

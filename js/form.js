@@ -87,7 +87,7 @@
       disableGuests();
     });
     fieldNumberOfGuests.addEventListener('change', function () {
-      window.synchronizeFields(fieldNumberOfGuests, fieldNumberOfRooms, VALUE_FIELDS.guests, VALUE_FIELDS.rooms, syncValues);
+      disableGuests();
     });
   };
 
@@ -104,10 +104,11 @@
 
   // Создание сообщения об ошибки
   var errorHandler = function (errorMessage) {
-    var errorPopup = window.messagePopup.error(errorMessage);
+    var errorPopup = window.messagePopup.createErrorMessage(errorMessage);
     document.querySelector('body').appendChild(errorPopup);
   };
 
+  // Сброс значений формы
   var resetForm = function () {
     form.reset();
     syncValueWithMin(fieldPrice, VALUE_FIELDS.prices[VALUE_FIELDS.types.indexOf('flat')]);
@@ -115,7 +116,7 @@
 
   // Создание сообщения об успешной отправки данных
   var successHandler = function () {
-    var successPopup = window.messagePopup.success();
+    var successPopup = window.messagePopup.createSuccessMessage();
     document.querySelector('body').appendChild(successPopup);
     resetForm();
   };
