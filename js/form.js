@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-
   var numberOfRooms = {
     1: ['1'],
     2: ['2', '1'],
@@ -127,12 +126,14 @@
   disableGuests();
   changeValueOfFields();
 
-  // Отправка формы
+  // Проверка валидации формы
   submitButton.addEventListener('click', function () {
     checkFieldValidity(fieldsForValidity);
   });
 
+  // Отправка формы
   form.addEventListener('submit', function (event) {
+    checkFieldValidity(fieldsForValidity);
     window.backend.save(new FormData(form), successHandler, errorHandler);
     event.preventDefault();
   });
