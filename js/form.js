@@ -68,6 +68,7 @@
 
   // Изменение полей формы
   var changeValueOfFields = function () {
+
     //  Изменение типа жилья в зависимости от цены
     fieldTypeOfHouse.addEventListener('change', function () {
       window.synchronizeFields(fieldTypeOfHouse, fieldPrice, VALUE_FIELDS.types, VALUE_FIELDS.prices, syncValueWithMin);
@@ -77,6 +78,7 @@
     fieldTimeOut.addEventListener('change', function () {
       window.synchronizeFields(fieldTimeOut, fieldTimeIn, VALUE_FIELDS.times, VALUE_FIELDS.times, syncValues);
     });
+
     fieldTimeIn.addEventListener('change', function () {
       window.synchronizeFields(fieldTimeIn, fieldTimeOut, VALUE_FIELDS.times, VALUE_FIELDS.times, syncValues);
     });
@@ -91,19 +93,20 @@
 
   // Проверка валидации
   var checkFieldValidity = function (fields) {
-    for (var i = 0; i < fields.length; i++) {
-      if (!fields[i].validity.valid) {
-        getCustomMessage(fields[i]);
+    fields.forEach(function (field) {
+      if (!field.validity.valid) {
+        getCustomMessage(field);
       } else {
-        fields[i].style.borderColor = '#d9d9d3';
+        field.style.borderColor = '#d9d9d3';
       }
-    }
+    });
   };
 
   // Создание сообщения об ошибки
   var errorHandler = function (errorMessage) {
     var errorPopup = window.messagePopup.createErrorMessage(errorMessage);
     document.querySelector('body').appendChild(errorPopup);
+    window.util.delElemTimeout(errorPopup, 'body', 2000);
   };
 
   // Сброс значений формы
@@ -116,6 +119,7 @@
   var successHandler = function () {
     var successPopup = window.messagePopup.createSuccessMessage();
     document.querySelector('body').appendChild(successPopup);
+    window.util.delElemTimeout(successPopup, 'body', 2000);
     resetForm();
   };
 
@@ -127,8 +131,8 @@
     checkFieldValidity(fieldsForValidity);
   });
 
-  form.addEventListener('submit', function (evt) {
+  form.addEventListener('submit', function (event) {
     window.backend.save(new FormData(form), successHandler, errorHandler);
-    evt.preventDefault();
+    event.preventDefault();
   });
 })();

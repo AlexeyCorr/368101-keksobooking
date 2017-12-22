@@ -2,8 +2,6 @@
 
 (function () {
   var map = document.querySelector('.map');
-  var similarAdvertTemplate = document.querySelector('template').content.querySelector('.map__card');
-  var similarAdvert = similarAdvertTemplate.cloneNode(true);
 
   // Создание нового списка особенностей
   var createNewListFeatures = function (features, list) {
@@ -18,10 +16,11 @@
   // Создание списка с фотографиями
   var createNewListPhoto = function (photos, list) {
     list.innerHTML = '';
-    photos.forEach(function (feature) {
+    photos.forEach(function (photo) {
       var currentItem = document.createElement('li');
       var currentPhoto = document.createElement('img');
-      currentPhoto.src = feature;
+
+      currentPhoto.src = photo;
       currentPhoto.style.maxWidth = '100%';
       currentPhoto.style.height = '50px';
       currentPhoto.style.padding = '5px';
@@ -71,6 +70,9 @@
 
   // Создание доски с объявлением
   var createAdvertBoard = function (advert) {
+    var similarAdvertTemplate = document.querySelector('template').content.querySelector('.map__card');
+    var similarAdvert = similarAdvertTemplate.cloneNode(true);
+
     similarAdvert.querySelector('img').src = advert.author.avatar;
     similarAdvert.querySelector('h3').textContent = advert.offer.title;
     similarAdvert.querySelector('p small').textContent = advert.offer.address;
@@ -86,8 +88,8 @@
   };
 
   // Показывает объявление при клике на пин
-  map.addEventListener('click', function (evt) {
-    var target = evt.target;
+  map.addEventListener('click', function (event) {
+    var target = event.target;
 
     while (target !== map) {
       if (target.classList.contains('map__pin') && !target.classList.contains('map__pin--main')) {

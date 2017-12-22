@@ -2,7 +2,7 @@
 
 (function () {
   var filterForm = document.querySelector('.map__filters');
-  var arrayCopy = [];
+  var filteredAdverts = [];
 
   var DEBOUNCE_INTERVAL = 500;
 
@@ -44,30 +44,30 @@
   };
 
   // Получение отфильтрованного массива данных
-  var getFilteredArray = function (originArray) {
-    var checkedFuetures = filterForm.querySelectorAll('#housing-features input[type="checkbox"]:checked');
+  var getFilteredAdverts = function (originAdverts) {
+    var checkedFeatures = filterForm.querySelectorAll('#housing-features input[type="checkbox"]:checked');
     var filterFields = filterForm.querySelectorAll('.map__filter');
 
     var activeFilters = Array.from(filterFields).filter(function (filter) {
       return filter.value !== 'any';
     });
 
-    arrayCopy = originArray.slice();
+    filteredAdverts = originAdverts.slice();
 
     activeFilters.forEach(function (filter) {
       var typeFilter = filter.id.split('-')[1];
-      arrayCopy = (typeFilter === 'price') ? filterByPrice(arrayCopy, filter.value) : filterByValue(arrayCopy, filter.value, typeFilter);
+      filteredAdverts = (typeFilter === 'price') ? filterByPrice(filteredAdverts, filter.value) : filterByValue(filteredAdverts, filter.value, typeFilter);
     });
 
-    checkedFuetures.forEach(function (item) {
-      arrayCopy = filterByFeatures(arrayCopy, item.value);
+    checkedFeatures.forEach(function (item) {
+      filteredAdverts = filterByFeatures(filteredAdverts, item.value);
     });
-    return arrayCopy;
+    return filteredAdverts;
   };
 
   filterForm.addEventListener('change', function () {
     window.util.debounce(window.data.updateAdverts, DEBOUNCE_INTERVAL);
   });
 
-  window.filter = getFilteredArray;
+  window.filter = getFilteredAdverts;
 })();
