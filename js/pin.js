@@ -40,6 +40,7 @@
   var drawMapPins = function (adverts) {
     var advertsCopy = adverts.slice();
     var fragment = document.createDocumentFragment();
+
     advertsCopy.length = (advertsCopy.length >= MAX_AMOUNT_ADVERTS) ? MAX_AMOUNT_ADVERTS : advertsCopy.length;
 
     advertsCopy.forEach(function (item) {
