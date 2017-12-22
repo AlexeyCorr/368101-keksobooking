@@ -38,12 +38,14 @@
 
   // Отрисовка маркеров на карте
   var drawMapPins = function (adverts) {
+    var advertsCopy = adverts.slice();
     var fragment = document.createDocumentFragment();
-    adverts.length = (adverts.length >= MAX_AMOUNT_ADVERTS) ? MAX_AMOUNT_ADVERTS : adverts.length;
+    advertsCopy.length = (advertsCopy.length >= MAX_AMOUNT_ADVERTS) ? MAX_AMOUNT_ADVERTS : advertsCopy.length;
 
-    for (var i = 0; i < adverts.length; i++) {
-      fragment.appendChild(createMapPin(adverts[i]));
-    }
+    advertsCopy.forEach(function (item) {
+      fragment.appendChild(createMapPin(item));
+    });
+
     drawArea.appendChild(fragment);
   };
 

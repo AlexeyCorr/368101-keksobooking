@@ -15,6 +15,21 @@
     });
   };
 
+  // Создание списка с фотографиями
+  var createNewListPhoto = function (photos, list) {
+    list.innerHTML = '';
+    photos.forEach(function (feature) {
+      var currentItem = document.createElement('li');
+      var currentPhoto = document.createElement('img');
+      currentPhoto.src = feature;
+      currentPhoto.style.maxWidth = '100%';
+      currentPhoto.style.height = '50px';
+      currentPhoto.style.padding = '5px';
+      list.appendChild(currentItem);
+      currentItem.appendChild(currentPhoto);
+    });
+  };
+
   // Получение типа помещения
   var getTypeHouse = function (typeHouse) {
     switch (typeHouse) {
@@ -65,6 +80,7 @@
     similarAdvert.querySelector('p:nth-of-type(4)').textContent = 'Заезд после ' + advert.offer.checkin + ', выезд до ' + advert.offer.checkout;
     createNewListFeatures(advert.offer.features, similarAdvert.querySelector('.popup__features'));
     similarAdvert.querySelector('p:nth-of-type(5)').textContent = advert.offer.description;
+    createNewListPhoto(advert.offer.photos, similarAdvert.querySelector('.popup__pictures'));
 
     return similarAdvert;
   };
