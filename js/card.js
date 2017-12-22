@@ -2,8 +2,6 @@
 
 (function () {
   var map = document.querySelector('.map');
-  var similarAdvertTemplate = document.querySelector('template').content.querySelector('.map__card');
-  var similarAdvert = similarAdvertTemplate.cloneNode(true);
 
   // Создание нового списка особенностей
   var createNewListFeatures = function (features, list) {
@@ -12,6 +10,22 @@
       var currentFeature = document.createElement('li');
       currentFeature.className = 'feature feature--' + feature;
       list.appendChild(currentFeature);
+    });
+  };
+
+  // Создание списка с фотографиями
+  var createNewListPhoto = function (photos, list) {
+    list.innerHTML = '';
+    photos.forEach(function (photo) {
+      var currentItem = document.createElement('li');
+      var currentPhoto = document.createElement('img');
+
+      currentPhoto.src = photo;
+      currentPhoto.style.maxWidth = '100%';
+      currentPhoto.style.height = '50px';
+      currentPhoto.style.padding = '5px';
+      list.appendChild(currentItem);
+      currentItem.appendChild(currentPhoto);
     });
   };
 
@@ -56,6 +70,9 @@
 
   // Создание доски с объявлением
   var createAdvertBoard = function (advert) {
+    var similarAdvertTemplate = document.querySelector('template').content.querySelector('.map__card');
+    var similarAdvert = similarAdvertTemplate.cloneNode(true);
+
     similarAdvert.querySelector('img').src = advert.author.avatar;
     similarAdvert.querySelector('h3').textContent = advert.offer.title;
     similarAdvert.querySelector('p small').textContent = advert.offer.address;
@@ -65,17 +82,18 @@
     similarAdvert.querySelector('p:nth-of-type(4)').textContent = 'Заезд после ' + advert.offer.checkin + ', выезд до ' + advert.offer.checkout;
     createNewListFeatures(advert.offer.features, similarAdvert.querySelector('.popup__features'));
     similarAdvert.querySelector('p:nth-of-type(5)').textContent = advert.offer.description;
+    createNewListPhoto(advert.offer.photos, similarAdvert.querySelector('.popup__pictures'));
 
     return similarAdvert;
   };
 
   // Показывает объявление при клике на пин
-  map.addEventListener('click', function (evt) {
-    var target = evt.target;
+  map.addEventListener('click', function (event) {
+    var target = event.target;
 
     while (target !== map) {
       if (target.classList.contains('map__pin') && !target.classList.contains('map__pin--main')) {
-        window.showCard(target, window.data.adverts[target.dataset.index]);
+        window.showCard.showAdvert(target, window.data.adverts[target.dataset.index]);
         return;
       }
       target = target.parentNode;

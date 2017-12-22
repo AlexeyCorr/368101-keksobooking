@@ -4,19 +4,21 @@
   var advertCard = null;
   var map = document.querySelector('.map');
 
-  var hideAdvert = function () {
+  var removeAdvert = function () {
     if (advertCard) {
       map.removeChild(advertCard);
       advertCard = null;
     }
   };
 
+  var onEscKeydown = function (event) {
+    window.util.isEscEvent(event, popupClose);
+  };
+
   var popupClose = function () {
-    hideAdvert();
+    removeAdvert();
     selectedPin.classList.remove('map__pin--active');
-    document.removeEventListener('keydown', function (evt) {
-      window.util.isEscEvent(evt, popupClose);
-    });
+    document.removeEventListener('keydown', onEscKeydown);
   };
 
   // Функция показа объявления
@@ -24,7 +26,7 @@
   var showAdvert = function (target, adverts) {
     if (selectedPin) {
       selectedPin.classList.remove('map__pin--active');
-      hideAdvert();
+      removeAdvert();
     }
     selectedPin = target;
     advertCard = window.card.createAdvertBoard(adverts);
@@ -34,10 +36,11 @@
     buttonClose.addEventListener('click', function () {
       popupClose();
     });
-    document.addEventListener('keydown', function (evt) {
-      window.util.isEscEvent(evt, popupClose);
-    });
+    document.addEventListener('keydown', onEscKeydown);
   };
 
-  window.showCard = showAdvert;
+  window.showCard = {
+    showAdvert: showAdvert,
+    removeAdvert: removeAdvert
+  };
 })();

@@ -4,6 +4,7 @@
   var map = document.querySelector('.map');
   var mapPinMain = map.querySelector('.map__pin--main');
   var fieldAddress = document.querySelector('#address');
+  var mapUnlocked = false;
 
   var PIN_MAIN_PARAMS = {
     height: 66,
@@ -36,28 +37,30 @@
   var unlockMap = function () {
     var form = document.querySelector('.notice__form');
     var formFields = form.querySelectorAll('fieldset');
+
     window.util.removeClass(map, 'map--faded');
     window.util.removeClass(form, 'notice__form--disabled');
     for (var i = 0; i < formFields.length; i++) {
       formFields[i].disabled = false;
     }
+    mapUnlocked = true;
   };
 
   // Реализация перетаскивания
-  mapPinMain.addEventListener('mousedown', function (evt) {
-    evt.preventDefault();
+  mapPinMain.addEventListener('mousedown', function (event) {
+    event.preventDefault();
 
     var startCoords = {
-      x: evt.clientX,
-      y: evt.clientY
+      x: event.clientX,
+      y: event.clientY
     };
 
-    var onMouseMove = function (moveEvt) {
-      moveEvt.preventDefault();
+    var onMouseMove = function (moveEvent) {
+      moveEvent.preventDefault();
 
       var shift = {
-        x: startCoords.x - moveEvt.clientX,
-        y: startCoords.y - moveEvt.clientY
+        x: startCoords.x - moveEvent.clientX,
+        y: startCoords.y - moveEvent.clientY
       };
 
       var currentCoors = {
@@ -79,8 +82,8 @@
       }
 
       startCoords = {
-        x: moveEvt.clientX,
-        y: moveEvt.clientY
+        x: moveEvent.clientX,
+        y: moveEvent.clientY
       };
 
       mapPinMain.style.top = currentCoors.y + 'px';
@@ -90,11 +93,12 @@
     };
 
     // Активация карты и формы
-    var onMouseUp = function (upEvt) {
-      upEvt.preventDefault();
-
-      unlockMap();
-      window.data.load();
+    var onMouseUp = function (upEvent) {
+      upEvent.preventDefault();
+      if (!mapUnlocked) {
+        unlockMap();
+        window.data.loadData();
+      }
 
       map.removeEventListener('mousemove', onMouseMove);
       map.removeEventListener('mouseup', onMouseUp);
