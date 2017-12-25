@@ -1,12 +1,20 @@
 'use strict';
 
 (function () {
-  var numberOfRooms = {
+  var NUMBER_OF_ROOMS = {
     1: ['1'],
     2: ['2', '1'],
     3: ['3', '2', '1'],
     100: ['0']
   };
+  var VALUE_FIELDS = {
+    TIMES: ['12:00', '13:00', '14:00'],
+    TYPES: ['bungalo', 'flat', 'house', 'palace'],
+    ROOMS: ['1', '2', '3', '100'],
+    GUESTS: ['1', '2', '3', '0'],
+    PRICES: ['0', '1000', '5000', '10000']
+  };
+
   var form = document.querySelector('.notice__form');
   var fieldTitle = form.querySelector('#title');
   var fieldTimeIn = form.querySelector('#timein');
@@ -17,13 +25,6 @@
   var fieldNumberOfGuests = form.querySelector('#capacity');
   var submitButton = form.querySelector('.form__submit');
   var fieldsForValidity = [fieldTitle, fieldPrice];
-  var VALUE_FIELDS = {
-    times: ['12:00', '13:00', '14:00'],
-    types: ['bungalo', 'flat', 'house', 'palace'],
-    rooms: ['1', '2', '3', '100'],
-    guests: ['1', '2', '3', '0'],
-    prices: ['0', '1000', '5000', '10000']
-  };
 
   // Создает кастомное сообщение об ошибки
   var getCustomMessage = function (element) {
@@ -47,11 +48,7 @@
   var disableGuests = function () {
     var option = fieldNumberOfGuests.options;
     for (var i = 0; i < option.length; i++) {
-      if (numberOfRooms[fieldNumberOfRooms.value].indexOf(option[i].value) >= 0) {
-        option[i].disabled = false;
-      } else {
-        option[i].disabled = true;
-      }
+      option[i].disabled = NUMBER_OF_ROOMS[fieldNumberOfRooms.value].indexOf(option[i].value) < 0;
     }
   };
 
@@ -71,21 +68,21 @@
 
     //  Изменение типа жилья в зависимости от цены
     fieldTypeOfHouse.addEventListener('change', function () {
-      window.synchronizeFields(fieldTypeOfHouse, fieldPrice, VALUE_FIELDS.types, VALUE_FIELDS.prices, syncValueWithMin);
+      window.synchronizeFields(fieldTypeOfHouse, fieldPrice, VALUE_FIELDS.TYPES, VALUE_FIELDS.PRICES, syncValueWithMin);
     });
 
     // Измерение времени заезда и выезда
     fieldTimeOut.addEventListener('change', function () {
-      window.synchronizeFields(fieldTimeOut, fieldTimeIn, VALUE_FIELDS.times, VALUE_FIELDS.times, syncValues);
+      window.synchronizeFields(fieldTimeOut, fieldTimeIn, VALUE_FIELDS.TIMES, VALUE_FIELDS.TIMES, syncValues);
     });
 
     fieldTimeIn.addEventListener('change', function () {
-      window.synchronizeFields(fieldTimeIn, fieldTimeOut, VALUE_FIELDS.times, VALUE_FIELDS.times, syncValues);
+      window.synchronizeFields(fieldTimeIn, fieldTimeOut, VALUE_FIELDS.TIMES, VALUE_FIELDS.TIMES, syncValues);
     });
 
     // Изменение количества гостей в зависимости от количества комнат
     fieldNumberOfRooms.addEventListener('change', function () {
-      window.synchronizeFields(fieldNumberOfRooms, fieldNumberOfGuests, VALUE_FIELDS.rooms, VALUE_FIELDS.guests, syncValues);
+      window.synchronizeFields(fieldNumberOfRooms, fieldNumberOfGuests, VALUE_FIELDS.ROOMS, VALUE_FIELDS.GUESTS, syncValues);
       disableGuests();
     });
 
@@ -104,7 +101,7 @@
 
   // Создание сообщения об ошибки
   var errorHandler = function (errorMessage) {
-    var errorPopup = window.messagePopup.createErrorMessage(errorMessage);
+    var errorPopup = window.popup.createErrorMessage(errorMessage);
     document.querySelector('body').appendChild(errorPopup);
     window.util.delElemTimeout(errorPopup, 'body', 2000);
   };
@@ -112,12 +109,12 @@
   // Сброс значений формы
   var resetForm = function () {
     form.reset();
-    syncValueWithMin(fieldPrice, VALUE_FIELDS.prices[VALUE_FIELDS.types.indexOf('flat')]);
+    syncValueWithMin(fieldPrice, VALUE_FIELDS.PRICES[VALUE_FIELDS.TYPES.indexOf('flat')]);
   };
 
   // Создание сообщения об успешной отправки данных
   var successHandler = function () {
-    var successPopup = window.messagePopup.createSuccessMessage();
+    var successPopup = window.popup.createSuccessMessage();
     document.querySelector('body').appendChild(successPopup);
     window.util.delElemTimeout(successPopup, 'body', 2000);
     resetForm();

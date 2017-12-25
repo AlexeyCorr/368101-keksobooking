@@ -1,25 +1,24 @@
 'use strict';
 
 (function () {
+  var DEBOUNCE_INTERVAL = 500;
+  var LIMIT_PRICE = {
+    MIN: 10000,
+    MAX: 50000
+  };
+
   var filterForm = document.querySelector('.map__filters');
   var filteredAdverts = [];
 
-  var DEBOUNCE_INTERVAL = 500;
-
-  var LIMIT_PRICE = {
-    min: 10000,
-    max: 50000
-  };
-
   var priceRange = {
     low: function (price) {
-      return price < LIMIT_PRICE.min;
+      return price < LIMIT_PRICE.MIN;
     },
     middle: function (price) {
-      return price >= LIMIT_PRICE.min && price < LIMIT_PRICE.max;
+      return price >= LIMIT_PRICE.MIN && price < LIMIT_PRICE.MAX;
     },
     high: function (price) {
-      return price >= LIMIT_PRICE.max;
+      return price >= LIMIT_PRICE.MAX;
     }
   };
 
@@ -48,6 +47,7 @@
     var checkedFeatures = filterForm.querySelectorAll('#housing-features input[type="checkbox"]:checked');
     var filterFields = filterForm.querySelectorAll('.map__filter');
 
+    // не совсем понимаю в чем ошибка, так как после каждого вызова функции нам и нужно обновить наши данные
     var activeFilters = Array.from(filterFields).filter(function (filter) {
       return filter.value !== 'any';
     });

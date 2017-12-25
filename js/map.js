@@ -1,44 +1,41 @@
 'use strict';
 
 (function () {
-  var map = document.querySelector('.map');
-  var mapPinMain = map.querySelector('.map__pin--main');
-  var fieldAddress = document.querySelector('#address');
-  var mapUnlocked = false;
-
   var PIN_MAIN_PARAMS = {
-    height: 66,
-    width: 66,
-    arrowHeight: 22
+    HEIGHT: 66,
+    WIDTH: 66,
+    ARROW_HEIGHT: 22
   };
   var LOCATION_LIMITATIONS = {
-    x: {
-      min: 300,
-      max: 900
+    X: {
+      MIN: 300,
+      MAX: 900
     },
-    y: {
-      min: 100,
-      max: 500
+    Y: {
+      MIN: 100,
+      MAX: 500
     }
   };
-
   // Смещение пина
-  var pinOffsetY = PIN_MAIN_PARAMS.height / 2 + PIN_MAIN_PARAMS.arrowHeight;
-
+  var PIN_OFFSET_Y = PIN_MAIN_PARAMS.HEIGHT / 2 + PIN_MAIN_PARAMS.ARROW_HEIGHT;
   // Ограничения координат
   var MAP_CONTAINER = {
-    top: LOCATION_LIMITATIONS.y.min + pinOffsetY,
-    bottom: LOCATION_LIMITATIONS.y.max + pinOffsetY,
-    left: LOCATION_LIMITATIONS.x.min,
-    right: LOCATION_LIMITATIONS.x.max
+    TOP: LOCATION_LIMITATIONS.Y.MIN + PIN_OFFSET_Y,
+    BOTTOM: LOCATION_LIMITATIONS.Y.MAX + PIN_OFFSET_Y,
+    LEFT: LOCATION_LIMITATIONS.X.MIN,
+    RIGHT: LOCATION_LIMITATIONS.X.MAX
   };
+
+  window.map = document.querySelector('.map');
+  var mapPinMain = window.map.querySelector('.map__pin--main');
+  var fieldAddress = document.querySelector('#address');
+  var form = document.querySelector('.notice__form');
+  var formFields = form.querySelectorAll('fieldset');
+  var mapUnlocked = false;
 
   // Разблокирование карты
   var unlockMap = function () {
-    var form = document.querySelector('.notice__form');
-    var formFields = form.querySelectorAll('fieldset');
-
-    window.util.removeClass(map, 'map--faded');
+    window.util.removeClass(window.map, 'map--faded');
     window.util.removeClass(form, 'notice__form--disabled');
     for (var i = 0; i < formFields.length; i++) {
       formFields[i].disabled = false;
@@ -68,17 +65,17 @@
         y: (mapPinMain.offsetTop - shift.y)
       };
 
-      if (currentCoors.x < MAP_CONTAINER.left) {
-        currentCoors.x = MAP_CONTAINER.left;
+      if (currentCoors.x < MAP_CONTAINER.LEFT) {
+        currentCoors.x = MAP_CONTAINER.LEFT;
       }
-      if (currentCoors.x > MAP_CONTAINER.right) {
-        currentCoors.x = MAP_CONTAINER.right;
+      if (currentCoors.x > MAP_CONTAINER.RIGHT) {
+        currentCoors.x = MAP_CONTAINER.RIGHT;
       }
-      if (currentCoors.y < MAP_CONTAINER.top) {
-        currentCoors.y = MAP_CONTAINER.top;
+      if (currentCoors.y < MAP_CONTAINER.TOP) {
+        currentCoors.y = MAP_CONTAINER.TOP;
       }
-      if (currentCoors.y > MAP_CONTAINER.bottom) {
-        currentCoors.y = MAP_CONTAINER.bottom;
+      if (currentCoors.y > MAP_CONTAINER.BOTTOM) {
+        currentCoors.y = MAP_CONTAINER.BOTTOM;
       }
 
       startCoords = {
@@ -89,7 +86,7 @@
       mapPinMain.style.top = currentCoors.y + 'px';
       mapPinMain.style.left = currentCoors.x + 'px';
 
-      fieldAddress.value = 'x: ' + currentCoors.x + 'px, y: ' + (currentCoors.y - pinOffsetY) + 'px';
+      fieldAddress.value = 'x: ' + currentCoors.x + 'px, y: ' + (currentCoors.y - PIN_OFFSET_Y) + 'px';
     };
 
     // Активация карты и формы
@@ -100,12 +97,12 @@
         window.data.loadData();
       }
 
-      map.removeEventListener('mousemove', onMouseMove);
-      map.removeEventListener('mouseup', onMouseUp);
+      window.map.removeEventListener('mousemove', onMouseMove);
+      window.map.removeEventListener('mouseup', onMouseUp);
     };
 
-    map.addEventListener('mousemove', onMouseMove);
-    map.addEventListener('mouseup', onMouseUp);
+    window.map.addEventListener('mousemove', onMouseMove);
+    window.map.addEventListener('mouseup', onMouseUp);
   });
 
 })();

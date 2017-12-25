@@ -2,11 +2,10 @@
 
 (function () {
   var advertCard = null;
-  var map = document.querySelector('.map');
 
   var removeAdvert = function () {
     if (advertCard) {
-      map.removeChild(advertCard);
+      window.map.removeChild(advertCard);
       advertCard = null;
     }
   };
@@ -23,14 +22,14 @@
 
   // Функция показа объявления
   var selectedPin;
-  var showAdvert = function (target, adverts) {
+  var createAdvert = function (target, adverts) {
     if (selectedPin) {
       selectedPin.classList.remove('map__pin--active');
       removeAdvert();
     }
     selectedPin = target;
     advertCard = window.card.createAdvertBoard(adverts);
-    map.insertBefore(advertCard, map.querySelector('.map__filters-container'));
+    window.map.insertBefore(advertCard, window.map.querySelector('.map__filters-container'));
     var buttonClose = advertCard.querySelector('.popup__close');
     selectedPin.classList.add('map__pin--active');
     buttonClose.addEventListener('click', function () {
@@ -40,7 +39,7 @@
   };
 
   window.showCard = {
-    showAdvert: showAdvert,
+    createAdvert: createAdvert,
     removeAdvert: removeAdvert
   };
 })();

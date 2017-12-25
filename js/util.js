@@ -2,6 +2,7 @@
 
 (function () {
   var ESC_KEYCODE = 27;
+
   var lastTimeout = null;
 
   window.util = {

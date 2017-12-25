@@ -1,8 +1,8 @@
 'use strict';
 
 (function () {
-  var colorError = 'rgba(150, 17, 17, 0.7)';
-  var colorSuccess = 'rgba(35, 123, 53, 0.7)';
+  var COLOR_ERROR = 'rgba(150, 17, 17, 0.7)';
+  var COLOR_SUCCESS = 'rgba(35, 123, 53, 0.7)';
 
   var createPopup = function (colorBackground, title, text) {
     var popup = document.createElement('div');
@@ -43,15 +43,15 @@
 
   // Создание окна с сообщением об ошибке
   var createErrorMessage = function (errorMessage) {
-    return createPopup(colorError, 'Произошла ошибка =(', errorMessage);
+    return createPopup(COLOR_ERROR, 'Произошла ошибка =(', errorMessage);
   };
 
   // Создание окна с сообщением об успехе
   var createSuccessMessage = function () {
-    return createPopup(colorSuccess, 'Поздравляю!', 'Данные были успешно отравлены.');
+    return createPopup(COLOR_SUCCESS, 'Поздравляю!', 'Данные были успешно отравлены.');
   };
 
-  window.messagePopup = {
+  window.popup = {
     createErrorMessage: createErrorMessage,
     createSuccessMessage: createSuccessMessage
   };

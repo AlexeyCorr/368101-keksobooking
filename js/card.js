@@ -1,8 +1,6 @@
 'use strict';
 
 (function () {
-  var map = document.querySelector('.map');
-
   // Создание нового списка особенностей
   var createNewListFeatures = function (features, list) {
     list.innerHTML = '';
@@ -46,6 +44,7 @@
   var getRoomsAndGuests = function (advert) {
     var amountRooms = advert.offer.rooms;
     var amountGuests = advert.offer.guests;
+    var numberGuests;
     var amountRoomsAndGuests = '';
     switch (amountRooms) {
       case (2, 3, 4):
@@ -58,12 +57,10 @@
         amountRooms = 1 + ' комната';
         break;
     }
-    if (amountGuests !== 1) {
-      amountGuests = amountGuests + ' гостей';
-    } else {
-      amountGuests = 1 + ' гостя';
-    }
-    amountRoomsAndGuests = amountRooms + ' для ' + amountGuests;
+
+    numberGuests = (amountGuests !== 1) ? amountGuests + ' гостей' : 1 + ' гостя';
+
+    amountRoomsAndGuests = amountRooms + ' для ' + numberGuests;
 
     return amountRoomsAndGuests;
   };
@@ -88,15 +85,11 @@
   };
 
   // Показывает объявление при клике на пин
-  map.addEventListener('click', function (event) {
-    var target = event.target;
+  window.map.addEventListener('click', function (event) {
+    var targetPin = event.target.closest('.map__pin:not(.map__pin--main)');
 
-    while (target !== map) {
-      if (target.classList.contains('map__pin') && !target.classList.contains('map__pin--main')) {
-        window.showCard.showAdvert(target, window.data.adverts[target.dataset.index]);
-        return;
-      }
-      target = target.parentNode;
+    if (targetPin) {
+      window.showCard.createAdvert(targetPin, window.data.adverts[targetPin.dataset.index]);
     }
   }, true);
 

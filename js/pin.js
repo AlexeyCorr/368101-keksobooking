@@ -1,35 +1,25 @@
 'use strict';
 (function () {
-  var drawArea = document.querySelector('.map__pins');
-
   // Параметры пина
   var PIN_PARAMS = {
-    height: 40,
-    width: 40,
-    arrowHeight: 18
+    HEIGHT: 40,
+    WIDTH: 40,
+    ARROW_HEIGHT: 18
   };
-
   // Максимальное колическо объявлений на карте
   var MAX_AMOUNT_ADVERTS = 5;
-
   // Смещение пина относительно его высоты
-  var pinOffsetY = PIN_PARAMS.height / 2 + PIN_PARAMS.arrowHeight;
+  var PIN_OFFSET_Y = PIN_PARAMS.HEIGHT / 2 + PIN_PARAMS.ARROW_HEIGHT;
 
-  // Удаление пинов на карте
-  var removePins = function (pins) {
-    Array.from(pins).forEach(function (pin) {
-      drawArea.removeChild(pin);
-    });
-    return drawArea;
-  };
+  var mapPinTemplate = document.querySelector('template').content.querySelector('.map__pin');
+  // var mapPinElement = mapPinTemplate.cloneNode(true);
+  var drawArea = document.querySelector('.map__pins');
 
   // Создание маркеров объявлений
   var createMapPin = function (advert) {
-    var mapPinTemplate = document.querySelector('template').content.querySelector('.map__pin');
     var mapPinElement = mapPinTemplate.cloneNode(true);
-
     mapPinElement.style.left = advert.location.x + 'px';
-    mapPinElement.style.top = advert.location.y - pinOffsetY + 'px';
+    mapPinElement.style.top = advert.location.y - PIN_OFFSET_Y + 'px';
     mapPinElement.querySelector('img').src = advert.author.avatar;
     mapPinElement.dataset.index = window.data.adverts.indexOf(advert);
 
@@ -37,7 +27,7 @@
   };
 
   // Отрисовка маркеров на карте
-  var drawMapPins = function (adverts) {
+  var insertInMap = function (adverts) {
     var advertsCopy = adverts.slice();
     var fragment = document.createDocumentFragment();
 
@@ -50,8 +40,16 @@
     drawArea.appendChild(fragment);
   };
 
+  // Удаление пинов на карте
+  var removeFromMap = function (pins) {
+    Array.from(pins).forEach(function (pin) {
+      drawArea.removeChild(pin);
+    });
+    return drawArea;
+  };
+
   window.pin = {
-    drawMapPins: drawMapPins,
-    removePins: removePins
+    insertInMap: insertInMap,
+    removeFromMap: removeFromMap
   };
 })();
